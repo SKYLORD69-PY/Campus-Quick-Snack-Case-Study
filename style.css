@@ -1,0 +1,315 @@
+/* Empathy to Execution Flow — Aspretto Stock Visibility
+   STET301 Mid-term case study */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #292623;
+  background-color: #ffffff;
+  line-height: 1.6;
+}
+
+.wrap {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Header */
+
+header {
+  background-color: #b1462b;
+  color: #ffffff;
+  padding: 40px 0 30px 0;
+}
+
+header .wrap > p.course {
+  margin: 0 0 6px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 14px;
+  color: #f4d9cf;
+}
+
+header h1 {
+  margin: 0 0 12px 0;
+  font-size: 32px;
+  line-height: 1.25;
+}
+
+header p.byline {
+  margin: 0 0 22px 0;
+  font-size: 15px;
+  color: #f7e4dc;
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+}
+
+nav a {
+  color: #ffffff;
+  text-decoration: none;
+  border-bottom: 1px solid #e2a494;
+  font-size: 15px;
+}
+
+nav a:hover {
+  border-bottom-color: #ffffff;
+}
+
+/* Section structure */
+
+section {
+  padding: 46px 0;
+  border-bottom: 1px solid #e5e0da;
+}
+
+section:last-of-type {
+  border-bottom: none;
+}
+
+.phase-label {
+  display: inline-block;
+  background-color: #f4ece6;
+  color: #b1462b;
+  font-size: 13px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: 3px;
+  margin-bottom: 10px;
+}
+
+h2 {
+  font-size: 26px;
+  margin: 0 0 8px 0;
+  color: #1d1b19;
+}
+
+section > p.section-intro {
+  margin-top: 0;
+  color: #55504b;
+  font-size: 16px;
+}
+
+article {
+  margin-top: 36px;
+}
+
+article:first-of-type {
+  margin-top: 28px;
+}
+
+h3 {
+  font-size: 19px;
+  margin: 0 0 4px 0;
+  color: #1d1b19;
+  border-left: 4px solid #b1462b;
+  padding-left: 10px;
+}
+
+h4 {
+  font-size: 15px;
+  margin: 18px 0 6px 0;
+  color: #1d1b19;
+}
+
+p {
+  margin: 10px 0;
+}
+
+.meta {
+  font-size: 14px;
+  color: #75706a;
+  margin: 4px 0 14px 0;
+}
+
+.meta a {
+  color: #b1462b;
+}
+
+article a, .callout a {
+  color: #b1462b;
+}
+
+/* Figures / hand-drawn artifacts */
+
+figure {
+  margin: 16px 0;
+  padding: 10px;
+  background-color: #faf8f6;
+  border: 1px solid #e5e0da;
+  border-radius: 4px;
+  max-width: 480px;
+}
+
+figure.wide {
+  max-width: 620px;
+}
+
+figure img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 2px;
+}
+
+figcaption {
+  font-size: 13px;
+  color: #75706a;
+  margin-top: 8px;
+  font-style: italic;
+}
+
+/* Quotes and callouts */
+
+blockquote {
+  margin: 16px 0;
+  padding: 12px 18px;
+  border-left: 4px solid #b1462b;
+  background-color: #faf8f6;
+  font-size: 16px;
+  color: #35312d;
+}
+
+blockquote p {
+  margin: 4px 0;
+}
+
+.callout {
+  background-color: #f4ece6;
+  border: 1px solid #e9d5c9;
+  border-radius: 4px;
+  padding: 14px 18px;
+  margin: 16px 0;
+  font-size: 15px;
+}
+
+.callout h4 {
+  margin-top: 0;
+}
+
+/* Lists */
+
+ul, ol {
+  padding-left: 22px;
+}
+
+li {
+  margin-bottom: 6px;
+}
+
+.quote-list li {
+  margin-bottom: 8px;
+}
+
+/* Tables */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 14.5px;
+}
+
+caption {
+  text-align: left;
+  font-size: 13px;
+  color: #75706a;
+  margin-bottom: 6px;
+  font-style: italic;
+}
+
+th, td {
+  border: 1px solid #e5e0da;
+  padding: 8px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background-color: #f4ece6;
+  color: #1d1b19;
+}
+
+tr:nth-child(even) td {
+  background-color: #faf8f6;
+}
+
+table.moscow th {
+  width: 25%;
+}
+
+table.moscow td ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+td.winner {
+  background-color: #f4ece6;
+  font-weight: bold;
+}
+
+/* Pivot notes */
+
+.pivot {
+  border: 1px solid #e5e0da;
+  border-left: 4px solid #b1462b;
+  border-radius: 0 4px 4px 0;
+  padding: 10px 16px;
+  margin: 12px 0;
+  background-color: #faf8f6;
+}
+
+.pivot .pivot-num {
+  color: #b1462b;
+  font-weight: bold;
+}
+
+/* Footer */
+
+footer {
+  background-color: #1d1b19;
+  color: #cfc9c2;
+  padding: 30px 0;
+  font-size: 14px;
+}
+
+footer a {
+  color: #f0b09c;
+}
+
+footer p {
+  margin: 6px 0;
+}
+
+/* Small screens */
+
+@media (max-width: 600px) {
+  header h1 {
+    font-size: 26px;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
+
+  section {
+    padding: 32px 0;
+  }
+
+  figure {
+    max-width: 100%;
+  }
+}

@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>"Does This Place Even Restock?" — Aspretto Stock Visibility Case Study</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <p class="course">STET301 &middot; Human-Computer Interaction (UI/UX) &middot; Mid-term Examination &mdash; Empathy to Execution Flow</p>
+    <h1>"Does This Place Even Restock?"</h1>
+    <p class="byline">Why hostelers can't tell if Aspretto has anything left before they make the walk &mdash; and a validated, prioritized fix.</p>
+    <nav>
+      <ul>
+        <li><a href="#problem">The Problem</a></li>
+        <li><a href="#phase1">Phase 1: Empathize</a></li>
+        <li><a href="#phase2">Phase 2: Ideate &amp; Evaluate</a></li>
+        <li><a href="#phase3">Phase 3: Prioritize</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section id="problem">
+    <div class="wrap">
+      <h2>The Broken Experience</h2>
+      <p>Aspretto is the only quick, non-coffee snack counter on campus &mdash; and the campus itself is remote enough that there are only 2&ndash;3 known food options within reach at all, off-campus included. Every hosteler already knows what those are. Hostelers rely on Aspretto to bridge the gap between lunch and dinner, especially since class end times shift day to day and there's rarely time to plan a proper meal in between.</p>
+      <p>The problem: they show up and, more often than not, find the shelf picked over, the counter unstaffed, or both &mdash; with no way to know any of that before making the walk. A survey of 12 hostelers backs this up: 11 of 12 experience it, most at least weekly, and by far the most common response is to just skip the snack and wait until dinner.</p>
+
+      <div class="callout">
+        <h4>Why this became a digital case study, not a physical one</h4>
+        <p>A sign on the wall or a bell at the counter could fix this too &mdash; if someone kept it updated in real time and hostelers could see it before they'd already made the walk. Neither holds here: nobody staffs the counter reliably, so a static sign goes stale fast, and the entire pain point is that people can't tell any of this until they're already standing in front of the shelf. Fixing it needs a signal hostelers can check from wherever they are &mdash; which is why the rest of this case study treats it as an information problem, not a physical one.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="phase1">
+    <div class="wrap">
+      <span class="phase-label">Phase 1</span>
+      <h2>Empathy &amp; Definition</h2>
+
+      <article id="proto-persona">
+        <h3>Proto-Persona (Before Any Research)</h3>
+        <p>The assumption-based starting point, written before talking to anyone:</p>
+        <figure class="wide">
+          <img src="images/proto-persona.jpg" alt="Hand-written proto-persona note describing a 19-year-old VU student who finishes classes hungry, goes to Aspretto for a snack, finds the shelf empty, and has to wait until dinner.">
+          <figcaption>Proto-persona &mdash; written from assumption, before any real data.</figcaption>
+        </figure>
+      </article>
+
+      <article id="research">
+        <h3>Getting Real Data</h3>
+        <p>A 12-question survey went to hostelers first (12 responses, ~5 minutes average completion time). The headline numbers:</p>
+        <ul>
+          <li>75% (9/12) had personally gone to Aspretto in the last two weeks and found nothing they wanted.</li>
+          <li>92% (11/12) of respondents were hostelers &mdash; confirming the sample matches who this problem actually affects.</li>
+          <li>67% (8/12) hit this at least weekly (42% weekly, 25% almost daily).</li>
+          <li>Average "how much does this affect your day" rating: 3.17/5 &mdash; a real, recurring annoyance, not a crisis.</li>
+          <li>The single most common response to "what do you do when it happens" was skip food until dinner (33%), followed closely by leaving campus (25%) and eating snacks already brought (25%).</li>
+          <li>58% (7/12) said they'd buy a non-coffee snack from Aspretto if something they liked was in stock.</li>
+          <li>Asked how useful a heads-up before walking over would be, the average came back higher than the problem's own severity rating: 3.83/5.</li>
+        </ul>
+        <p>Three respondents answered "No" to the very first screener question, then went on to describe a specific Aspretto letdown in their own open-text answers later in the same survey &mdash; flagged here rather than quietly smoothed over, since self-report data is always going to have some noise like this.</p>
+        <p>The open-text answers added texture the multiple-choice couldn't. Two respondents specifically named walking to Manish instead &mdash; "found peace, but getting there is a hassle," as one put it &mdash; which says people already know their alternative; the gap isn't discovery, it's convenience. A few others used their one wish for something else entirely ("bring in the snacks that we demand," "start a retail counter&hellip; at affordable price"), a reminder that not every complaint here is a visibility problem. This project fixes the not-knowing, not the not-having.</p>
+        <p class="meta">Full survey results: <a href="data/survey-results.pdf">Campus Snack Availability survey (PDF)</a></p>
+        <p>To get past self-report, one regular hosteler &mdash; called Rohan for this case study &mdash; was shadowed at Aspretto in person and logged in real time, present tense, over the seven minutes it took to play out (3:27&ndash;3:34 PM):</p>
+        <figure class="wide">
+          <img src="images/observation-log-1.jpg" alt="Handwritten observation log, steps 1 to 7, describing a hosteler walking past the coffee machine to a picked-over snack shelf, muttering 'Seriously? Again?', waiting at an unstaffed counter, calling out 'Hello?', and opening the university's Fretbox app to look for information about Aspretto.">
+          <figcaption>Observation log, part 1 of 2 &mdash; steps 1&ndash;7.</figcaption>
+        </figure>
+        <figure class="wide">
+          <img src="images/observation-log-2.jpg" alt="Handwritten observation log, steps 8 to 11, describing the Fretbox app having nothing about Aspretto, the hosteler asking whether the place restocks during the day, checking the time at 3:34 PM, and walking out toward the library without buying anything.">
+          <figcaption>Observation log, part 2 of 2 &mdash; steps 8&ndash;11.</figcaption>
+        </figure>
+        <div class="callout">
+          <h4>What he actually said, in the moment</h4>
+          <ul class="quote-list">
+            <li>"Seriously? Again?"</li>
+            <li>"Hello?"</li>
+            <li>"Does this place even restock during the day, or is whatever's left in the morning just&hellip; it?"</li>
+            <li>"Dinner's not till like 7."</li>
+          </ul>
+        </div>
+      </article>
+
+      <article id="persona">
+        <h3>Validated Persona</h3>
+        <p>Research turned the proto-persona into someone real enough to nickname &mdash; Hangry Rohan, a 19-year-old hosteler at VU:</p>
+        <figure class="wide">
+          <img src="images/user-persona.jpg" alt="Hand-written validated persona card describing a 19-year-old hosteler who swings by Aspretto for a quick snack before the library, often finds the shelf picked over and no one behind the counter, and, with no way to check beforehand and no quick alternative nearby, walks off empty-handed and waits until dinner. Happens weekly, sometimes more.">
+          <figcaption>Validated persona, built from the survey and observation above.</figcaption>
+        </figure>
+      </article>
+
+      <article id="empathy-map">
+        <h3>Empathy Map</h3>
+        <p>Built directly from the observation log:</p>
+        <figure class="wide">
+          <img src="images/empathy-map.jpg" alt="Hand-drawn Say / Think / Do / Feel empathy map. Says: Seriously, again; Hello; Does this place even restock during the day. Thinks: There has to be a way to check this without walking all the way here; Guess I'm doing without again. Does: scans the shelf twice, checks the empty hook, waits at the unstaffed counter, checks the Fretbox app, walks out empty-handed. Feels: mildly irritated, hungry, and hopeful.">
+          <figcaption>Empathy map &mdash; Say, Think, Do, Feel.</figcaption>
+        </figure>
+        <p>The gap that matters is between Does and Feels: he's still going through the motions &mdash; scanning twice, waiting, calling out, opening the app &mdash; well after Thinks shows he's already expecting nothing to come of it. The actions outlast the hope.</p>
+      </article>
+
+      <article id="journey-map">
+        <h3>Journey Map &amp; Emotion Line</h3>
+        <p>One specific visit, mapped across four stages:</p>
+        <figure class="wide">
+          <img src="images/journey-map.jpg" alt="Hand-drawn four-stage user journey map table with rows for Action, Thought, and Feeling across The Trigger (3:27 PM), The Visit (3:30 PM), The Disappointment (3:32 PM), and The Resolution (3:34 PM).">
+          <figcaption>Journey map &mdash; Action / Thought / Feeling across four stages.</figcaption>
+        </figure>
+        <figure>
+          <img src="images/emotion-line.jpg" alt="Hand-drawn emotion line graph dipping from a high point at The Trigger down to a circled low point labelled Pain Point around The Disappointment, staying low through The Resolution.">
+          <figcaption>Emotion line &mdash; the dip bottoms out at The Disappointment, not The Visit.</figcaption>
+        </figure>
+
+        <table>
+          <caption>Typed summary of the journey map above</caption>
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">The Trigger<br>3:27 PM</th>
+              <th scope="col">The Visit<br>3:30 PM</th>
+              <th scope="col">The Disappointment<br>3:32 PM</th>
+              <th scope="col">The Resolution<br>3:34 PM</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Action</th>
+              <td>Finishes classes, makes his way to Aspretto</td>
+              <td>Scans the shelf twice, waits for staff, calls out</td>
+              <td>Checks Fretbox for any answer, finds nothing</td>
+              <td>Walks out from Aspretto empty-handed</td>
+            </tr>
+            <tr>
+              <th scope="row">Thought</th>
+              <td>"I'll grab something quick before I study."</td>
+              <td>"Come on, there has to be something."</td>
+              <td>"Not even the app knows. There's just no way to check this."</td>
+              <td>"Not worth waiting here anymore. I'll wait till dinner."</td>
+            </tr>
+            <tr>
+              <th scope="row">Feeling</th>
+              <td>Hopeful, hungry</td>
+              <td>Deflated</td>
+              <td>Defeated</td>
+              <td>Resigned</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout">
+          <h4>Why the low point isn't the empty shelf</h4>
+          <p>The emotion line bottoms out at The Disappointment (3:32 PM) &mdash; not The Visit, when the shelf first turns out empty. The empty shelf is almost expected by now; it's happened before. What actually breaks him is that the Fretbox app, his one backup plan, also comes up with nothing. That's the moment "I'll figure something out" turns into "there's just no way to check this."</p>
+        </div>
+      </article>
+
+      <article id="pain-point">
+        <h3>Pain Point</h3>
+        <blockquote>
+          <p>"When Aspretto is out of stock or unstaffed, hostelers have no way to find out beforehand or get an answer in the moment &mdash; not from the shelf, not from a staff member, and not from the university's own Fretbox app &mdash; so they're left to just give up and wait until dinner."</p>
+        </blockquote>
+      </article>
+
+      <article id="user-stories">
+        <h3>User Stories</h3>
+        <ol>
+          <li>As a hosteler who visits Aspretto often, I want to know the live stock status for Aspretto, so that I don't have to physically show up and return empty-handed.</li>
+          <li>As a hosteler heading to Aspretto, I want to know whether the counter is actually staffed right now, so that I'm not risking a wasted trip for a second reason on top of an already uncertain one.</li>
+          <li>As a hosteler who doesn't have a quick snacking option between lunch and dinner and never finds food from Aspretto when needed, I want a way to reserve snacks for myself so that I can have snacks whenever I want.</li>
+        </ol>
+      </article>
+
+    </div>
+  </section>
+
+  <section id="phase2">
+    <div class="wrap">
+      <span class="phase-label">Phase 2</span>
+      <h2>Ideate &amp; Evaluate</h2>
+
+      <article id="feature-list">
+        <h3>From 3 Stories to 18 Features</h3>
+        <p>Each user story was broken into the specific pieces of information or functionality it implied, then expanded with adjacent ideas &mdash; anything that could plausibly solve some version of this pain point went on the list, unfiltered. That produced 18 candidate features:</p>
+        <ol>
+          <li>Live stock status per item</li>
+          <li>Non-coffee snack menu</li>
+          <li>Today's expected menu</li>
+          <li>Price list</li>
+          <li>Photo menu gallery</li>
+          <li>Stockout history log</li>
+          <li>Notification when a sold-out item is restocked</li>
+          <li>Low-stock alerts</li>
+          <li>Favorite-item restock alert</li>
+          <li>Best-time-to-visit suggestion</li>
+          <li>Weekly stock rotation schedule</li>
+          <li>Pre-order a snack</li>
+          <li>Staff-on-counter indicator</li>
+          <li>Report empty stock</li>
+          <li>Item ratings &amp; reviews</li>
+          <li>Vote for new items to stock</li>
+          <li>Nearby alternate food spots</li>
+          <li>Distance/time to off-campus options</li>
+        </ol>
+      </article>
+
+      <article id="card-sort">
+        <h3>Card Sort</h3>
+        <p>All 18 items went into a hybrid card sort &mdash; five preset category labels (Live Stock &amp; Menu Info, Alerts &amp; Notifications, Ordering &amp; Planning, Feedback &amp; Community, Alternatives Off-Campus), plus a "Not Sure / Other" catch-all for anything that didn't fit. Microsoft Forms has no native card-sort tool, so it was run as a Likert-style grid: one row per feature, one column per category, and respondents marked which column each item belonged in. 12 people completed it, averaging 3:48 on the form; 1 was excluded for straight-lining &mdash; marking the same category for all 18 items &mdash; leaving 11 valid responses.</p>
+        <p>Most items sorted cleanly. Seven of the eighteen landed in one category with 70%+ agreement &mdash; Pre-order a snack, Favorite-item restock alert, and Item ratings &amp; reviews each pulled 9 of 11 votes into a single column. Across all 18 items, only 11 of 198 total votes (about 6%) landed in "Not Sure / Other" &mdash; and most of those sat on the same few items that split every other way too. That's why the catch-all got dropped from V1 rather than kept as a real menu section.</p>
+        <p>A handful of items never found a real home, though, and that turned out to matter:</p>
+        <table>
+          <caption>Items the sort couldn't agree on (of 11 valid responses)</caption>
+          <thead>
+            <tr>
+              <th scope="col">Item</th>
+              <th scope="col">Vote split</th>
+              <th scope="col">Shipped to V1 as</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Staff-on-counter indicator</td>
+              <td>Alerts 3, Ordering 3, Feedback 2, Not Sure 2, Live Stock 1</td>
+              <td>Ordering &amp; Planning</td>
+            </tr>
+            <tr>
+              <td>Today's expected menu</td>
+              <td>Live Stock 5, Alerts 5, Alternatives 1</td>
+              <td>Live Stock &amp; Menu Info</td>
+            </tr>
+            <tr>
+              <td>Photo menu gallery</td>
+              <td>Live Stock 4, Not Sure 3, Feedback 2, Alerts 1, Ordering 1</td>
+              <td>Live Stock &amp; Menu Info</td>
+            </tr>
+            <tr>
+              <td>Stockout history log</td>
+              <td>Live Stock 4, Alerts 2, Feedback 2, Not Sure 2, Ordering 1</td>
+              <td>Live Stock &amp; Menu Info</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>Staff-on-counter indicator is the one that mattered most: it never had a majority anywhere, split almost evenly between Alerts and Ordering &amp; Planning with real votes even for Feedback and Not Sure. V1 shipped it to Ordering &amp; Planning as the closest thing to a plurality &mdash; but the ambiguity was already visible here, well before the tree test made it undeniable (see Pivot 1, below).</p>
+        <p class="meta">Full card sort results: <a href="data/card-sort-results.pdf">Campus Snack App Quick Sort (PDF)</a></p>
+      </article>
+
+      <article id="ia-v1">
+        <h3>V1 Information Architecture</h3>
+        <p>18 items, sorted by 11 respondents into five categories. This structure went straight into the tree test:</p>
+        <figure class="wide">
+          <img src="images/ia-v1.jpg" alt="Hand-written V1 information architecture tree with 18 items across five categories: Live Stock &amp; Menu Info (six items), Alerts &amp; Notifications (four items), Ordering &amp; Planning (three items), Feedback &amp; Community (three items), and Alternatives Off-Campus (two items).">
+          <figcaption>V1 IA &mdash; 18 items, 5 categories, straight from the card sort.</figcaption>
+        </figure>
+      </article>
+
+      <article id="tree-test">
+        <h3>Tree Test</h3>
+        <p>Tested with a small self-built HTML/JS tool tracking click path, time on task, and CSV export &mdash; no paid tool needed. 10 scenarios were written, each worded as a natural task ("You want to check if your usual snack is back in stock" rather than the literal menu label), so the test measured navigation, not vocabulary-matching. 6 people completed all 10 tasks &mdash; one more than the 5-person minimum.</p>
+
+        <table>
+          <caption>Tree test results (6 participants &times; 10 tasks)</caption>
+          <thead>
+            <tr>
+              <th scope="col">Task(s)</th>
+              <th scope="col">Item being tested</th>
+              <th scope="col">First-click accuracy</th>
+              <th scope="col">Task success</th>
+              <th scope="col">What we found</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Tasks 1&ndash;3</td>
+              <td>Items inside Live Stock &amp; Menu Info</td>
+              <td>67&ndash;83%</td>
+              <td>&mdash;</td>
+              <td>Category was easy to find; people mixed up similar items once they were inside it</td>
+            </tr>
+            <tr>
+              <td>Task 5</td>
+              <td>Staff-on-counter indicator</td>
+              <td>33%</td>
+              <td>33%</td>
+              <td>Worst-performing task. 3 of 4 wrong answers landed on "Best-time-to-visit suggestion"</td>
+            </tr>
+            <tr>
+              <td>Task 6</td>
+              <td>Favorite-item restock alert</td>
+              <td>&mdash;</td>
+              <td>17%</td>
+              <td>Worst success rate overall. 4 of 5 who reached the right category still picked "Notification when a sold-out item is restocked" instead</td>
+            </tr>
+            <tr>
+              <td>Task 9</td>
+              <td>Nearby alternate food spots</td>
+              <td>&mdash;</td>
+              <td>83%</td>
+              <td>Best-performing task in the whole test</td>
+            </tr>
+            <tr>
+              <td><strong>All 10 tasks</strong></td>
+              <td>&mdash;</td>
+              <td><strong>35/60 (58%)</strong></td>
+              <td><strong>28/60 (47%)</strong></td>
+              <td>Overall result</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="meta">Full click-path data: <a href="https://vijaybhoomischool-my.sharepoint.com/:x:/g/personal/pranav_bagul_vijaybhoomi_edu_in/IQCfPfB8Ux00RaktYaJbGlWZAVhG3YmDWhtpRdnliU8kZTA?e=8pab3J">tree test results spreadsheet</a></p>
+      </article>
+
+      <article id="ia-v2">
+        <h3>Two Structural Pivots</h3>
+
+        <div class="pivot">
+          <p><span class="pivot-num">Pivot 1 &mdash;</span> "Staff-on-counter indicator" moved from Ordering &amp; Planning into Live Stock &amp; Menu Info, and renamed "Counter staffed right now?"</p>
+          <p>This item never had a clean home. It was the most-split item in the entire card sort &mdash; 3 votes Alerts, 3 Ordering &amp; Planning, 2 Feedback, 2 Not Sure &mdash; so V1 shipped it to Ordering &amp; Planning as the closest thing to a plurality, knowing it was a guess. The tree test made the cost of that guess concrete: Task 5 was the worst-performing task in the whole test &mdash; 33% first-click, 33% success &mdash; and the wrong guesses weren't random: 3 of the 4 landed on "Best-time-to-visit suggestion." That's a planning-flavored answer, but "is the counter staffed right this second" isn't a planning question &mdash; it's a right-now status question, the same kind of question as "is this item in stock right now." So it moved to sit next to Live stock status per item, where that mental model already lives.</p>
+        </div>
+
+        <div class="pivot">
+          <p><span class="pivot-num">Pivot 2 &mdash;</span> "Favorite-item restock alert" and "Notification when a sold-out item is restocked" merged into one item: "Restock notifications," under Alerts &amp; Notifications.</p>
+          <p>Task 6 had the worst success rate in the test at 17% &mdash; but it wasn't a category problem. 4 of the 5 people who found the right category still picked the wrong item once they were there, because the two options were saying almost the same thing in different words. Renaming either one wouldn't have fixed that; merging them removed the duplicate choice entirely.</p>
+        </div>
+
+        <p>The result: 17 items, 5 categories, with both pivots marked directly on the tree.</p>
+        <figure class="wide">
+          <img src="images/ia-v2.jpg" alt="Hand-written V2 information architecture tree with 17 items across five categories. A circled 1 marks Counter staffed right now moved into Live Stock &amp; Menu Info, and a circled 2 marks Restock notifications, the merged alert item, under Alerts &amp; Notifications.">
+          <figcaption>V2 IA &mdash; 17 items, 5 categories. Circled 1 and 2 mark the two pivots.</figcaption>
+        </figure>
+      </article>
+
+    </div>
+  </section>
+
+  <section id="phase3">
+    <div class="wrap">
+      <span class="phase-label">Phase 3</span>
+      <h2>Prioritization</h2>
+
+      <article id="moscow">
+        <h3>MoSCoW &mdash; Only Four Must-Haves</h3>
+        <figure class="wide">
+          <img src="images/moscow-1.jpg" alt="Hand-written MoSCoW board listing four Must-Have features (Live stock status per item, Restock notifications, Counter staffed right now, Report empty stock), four Should-Have features, and five Could-Have features.">
+          <figcaption>MoSCoW board, part 1 of 2 &mdash; Must-Have, Should-Have, Could-Have.</figcaption>
+        </figure>
+        <figure>
+          <img src="images/moscow-2.jpg" alt="Hand-written MoSCoW board listing the four Won't-Have features: Vote for new item to restock, Distance/time to off-campus options, Stockout history log, and Nearby alternate food spots. Item ratings and reviews is crossed out here since it was placed in Could-Have instead.">
+          <figcaption>MoSCoW board, part 2 of 2 &mdash; Won't-Have.</figcaption>
+        </figure>
+
+        <table class="moscow">
+          <caption>Typed version of the MoSCoW board above</caption>
+          <thead>
+            <tr>
+              <th scope="col">Must-Have</th>
+              <th scope="col">Should-Have</th>
+              <th scope="col">Could-Have</th>
+              <th scope="col">Won't-Have</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <ul>
+                  <li>Live stock status per item</li>
+                  <li>Restock notifications</li>
+                  <li>Counter staffed right now?</li>
+                  <li>Report empty stock</li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>Non-coffee snack menu</li>
+                  <li>Today's expected menu</li>
+                  <li>Low-stock alerts</li>
+                  <li>Weekly stock rotation schedule</li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>Price list</li>
+                  <li>Best-time-to-visit suggestion</li>
+                  <li>Pre-order a snack</li>
+                  <li>Photo menu gallery</li>
+                  <li>Item ratings &amp; reviews</li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li>Vote for new items to stock</li>
+                  <li>Distance/time to off-campus options</li>
+                  <li>Stockout history log</li>
+                  <li>Nearby alternate food spots</li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout">
+          <h4>Why "Report empty stock" took the fourth Must-Have slot</h4>
+          <p>There's no POS integration behind any of this, and no staff reliably behind the counter to update anything &mdash; so "Live stock status per item," Must-Have #1, has no data source unless someone puts one there. "Report empty stock" is that data source. It's the only feature on this list whose entire job is making another Must-Have actually work.</p>
+        </div>
+
+        <div class="callout">
+          <h4>Why "Nearby alternate food spots" didn't make the cut &mdash; even after the best tree test result</h4>
+          <p>This was the best-performing task in the entire tree test (83% success), and it still landed in Won't-Have. The campus is remote enough that there are only 2&ndash;3 known off-campus food options, and every hosteler already knows what they are &mdash; the survey backs this up directly: two respondents independently named the same off-campus spot, Manish, in their open-text answers, one describing it as "found peace, but getting there is a hassle." That's not a discovery problem a feature can fix; it's a convenience trade-off people are already making on their own. There's no real information gap to close here &mdash; nobody's failing to get food because they don't know where the off-campus options are; they're failing because they don't know if Aspretto has anything <em>right now</em>. Usability isn't the same question as whether a feature is worth building.</p>
+        </div>
+      </article>
+
+      <article id="dfv">
+        <h3>DFV Matrix &mdash; The Final Must-Have Slot</h3>
+        <p>The hardest-debated pair for that fourth Must-Have slot: <strong>Report empty stock</strong> vs. <strong>Non-coffee snack menu</strong>.</p>
+        <figure>
+          <img src="images/dfv-matrix.jpg" alt="Hand-drawn Desirability, Feasibility, Viability matrix. Report empty stock scores 3, 5, 5 for a total of 13. Non-coffee snack menu scores 3, 5, 2 for a total of 10. Report empty stock wins.">
+          <figcaption>DFV matrix, scored 1&ndash;5 per criterion.</figcaption>
+        </figure>
+
+        <table>
+          <caption>Typed version of the DFV matrix above</caption>
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">Desirability</th>
+              <th scope="col">Feasibility</th>
+              <th scope="col">Viability</th>
+              <th scope="col">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Report empty stock</th>
+              <td>3</td>
+              <td>5</td>
+              <td>5</td>
+              <td class="winner">13</td>
+            </tr>
+            <tr>
+              <th scope="row">Non-coffee snack menu</th>
+              <td>3</td>
+              <td>5</td>
+              <td>2</td>
+              <td>10</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p>Report empty stock wins on Viability, not on Desirability or Feasibility &mdash; both features tied on those. Non-coffee snack menu scores low on Viability because the tree test already proved the problem: tasks 1&ndash;3 showed people can't reliably tell "Non-coffee snack menu" and "Live stock status per item" apart once they're sitting in the same category. Shipping both would mean shipping the confusion. Report empty stock scores high on Viability because it doesn't compete with anything else on the list &mdash; it's the one feature whose entire reason to exist is making Live stock status per item possible in the first place.</p>
+      </article>
+
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>STET301 &mdash; Human-Computer Interaction (UI/UX) &middot; Mid-term Examination: Empathy to Execution Flow</p>
+    <p>Prepared by Pranav Bagul &middot; August 2026</p>
+    <p>GitHub Pages link: to be added once hosting is set up.</p>
+  </div>
+</footer>
+
+</body>
+</html>
