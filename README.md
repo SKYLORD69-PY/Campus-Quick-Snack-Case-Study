@@ -13,7 +13,7 @@ Built as a single scrolling page in plain HTML and CSS — no JavaScript, no fra
 
 ## Live site
 
-*(pending — will be added here once GitHub Pages is live)*
+https://skylord69-py.github.io/Campus-Quick-Snack-Case-Study/
 
 ## What's inside
 
