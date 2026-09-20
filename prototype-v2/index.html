@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aspretto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --brand:#FF6A3D;
+    --brand-deep:#E24E1F;
+    --brand-tint:#FFE7DB;
+    --ink:#241C16;
+    --ink-soft:#7A6E63;
+    --paper:#FFF8F1;
+    --card:#FFFFFF;
+    --rule:#F0E4D8;
+    --shadow:0 10px 30px -12px rgba(80,50,20,0.22);
+
+    --ok:#1E9E5A;
+    --ok-tint:#DCF5E6;
+    --warn:#DA8B12;
+    --warn-tint:#FCEACB;
+    --bad:#E5484D;
+    --bad-tint:#FBDFDF;
+  }
+  :root:not([data-theme="light"]){
+    @media (prefers-color-scheme: dark){
+      --ink:#F6EFE8; --ink-soft:#BFB0A2; --paper:#1A1410; --card:#241B14; --rule:#3A2E22;
+      --brand-tint:#3D2418; --ok-tint:#123422; --warn-tint:#3A2A0C; --bad-tint:#3A1518;
+      --shadow:0 10px 30px -12px rgba(0,0,0,0.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#F6EFE8; --ink-soft:#BFB0A2; --paper:#1A1410; --card:#241B14; --rule:#3A2E22;
+    --brand-tint:#3D2418; --ok-tint:#123422; --warn-tint:#3A2A0C; --bad-tint:#3A1518;
+    --shadow:0 10px 30px -12px rgba(0,0,0,0.5);
+  }
+
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter', system-ui, -apple-system, sans-serif;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:env(safe-area-inset-top,0) 16px env(safe-area-inset-bottom,0);
+  }
+  h1,h2,h3,.display{
+    font-family:'Fredoka', system-ui, sans-serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+
+  /* ---- phone shell ---- */
+  #shell-outer{
+    width:100%;
+    max-width:400px;
+    height:min(844px, 100vh);
+    padding-top:env(safe-area-inset-top,0);
+    padding-bottom:env(safe-area-inset-bottom,0);
+  }
+  #phone{
+    position:relative;
+    width:100%;
+    height:100%;
+    background:var(--paper);
+    border-radius:36px;
+    overflow:hidden;
+    box-shadow:var(--shadow);
+    border:1px solid var(--rule);
+    display:flex;
+    flex-direction:column;
+  }
+  @media (min-width:460px){
+    body{padding:32px 16px;}
+    #shell-outer{height:844px;}
+  }
+
+  .statusbar{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:14px 22px 4px; font-size:13px; font-weight:600; flex-shrink:0;
+  }
+  .statusbar .icons{display:flex; gap:5px; align-items:center; opacity:.75;}
+
+  #app{
+    flex:1;
+    overflow-y:auto;
+    position:relative;
+    -webkit-overflow-scrolling:touch;
+  }
+  .screen{
+    padding:6px 20px 28px;
+    animation:fadeUp .28s ease;
+  }
+  @keyframes fadeUp{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;}}
+
+  .brand-row{display:flex; align-items:center; gap:9px; margin:10px 0 18px;}
+  .brand-dot{width:30px;height:30px;border-radius:9px;background:var(--brand);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;box-shadow:0 4px 10px -4px rgba(226,78,31,.6);}
+  .brand-row span{font-size:19px; font-weight:600; font-family:'Fredoka',sans-serif;}
+
+  .h1{font-size:26px; line-height:1.18; margin:4px 0 2px;}
+  .sub{color:var(--ink-soft); font-size:14.5px; margin:0 0 20px;}
+
+  /* status card on home */
+  .status-card{
+    border-radius:22px; padding:22px 22px 24px; margin-bottom:16px;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .status-card.staffed{background:var(--ok-tint);}
+  .status-card.unstaffed{background:var(--bad-tint);}
+  .status-pill{
+    display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:700;
+    padding:5px 11px; border-radius:99px; width:fit-content; text-transform:uppercase; letter-spacing:.02em;
+  }
+  .staffed .status-pill{background:var(--ok); color:#fff;}
+  .unstaffed .status-pill{background:var(--bad); color:#fff;}
+  .status-headline{font-family:'Fredoka',sans-serif; font-size:21px; font-weight:600;}
+  .status-sub{font-size:13.5px; color:var(--ink-soft);}
+
+  .btn{
+    border:none; border-radius:16px; font-family:'Fredoka',sans-serif; font-weight:600;
+    font-size:16px; padding:16px 20px; width:100%; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    transition:transform .12s ease, filter .12s ease;
+  }
+  .btn:active{transform:scale(.97); filter:brightness(.95);}
+  .btn-primary{background:var(--brand); color:#fff; box-shadow:0 8px 18px -8px rgba(226,78,31,.55);}
+  .btn-ghost{background:var(--card); color:var(--ink); border:1.5px solid var(--rule);}
+  .btn-danger{background:var(--bad); color:#fff;}
+  .btn-sm{padding:10px 14px; font-size:13.5px; border-radius:12px; width:auto;}
+
+  .card{background:var(--card); border:1px solid var(--rule); border-radius:18px; padding:16px; margin-bottom:12px;}
+  .updated-row{display:flex; justify-content:space-between; align-items:center; margin:14px 0 14px;}
+  .updated-row .sub{margin:0;}
+
+  /* stock list rows */
+  .item-row{
+    display:flex; align-items:center; gap:12px;
+    padding:14px 4px; border-bottom:1px solid var(--rule);
+  }
+  .item-row:last-child{border-bottom:none;}
+  .item-emoji{font-size:26px; width:40px; text-align:center; flex-shrink:0;}
+  .item-info{flex:1; min-width:0;}
+  .item-name{font-weight:700; font-size:15.5px;}
+  .status-badge{
+    display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:700;
+    padding:3px 9px; border-radius:99px; margin-top:4px;
+  }
+  .status-badge::before{content:''; width:7px; height:7px; border-radius:50%; background:currentColor;}
+  .status-badge.in-stock{background:var(--ok-tint); color:var(--ok);}
+  .status-badge.low{background:var(--warn-tint); color:var(--warn);}
+  .status-badge.out{background:var(--bad-tint); color:var(--bad);}
+
+  .row-actions{display:flex; gap:8px; flex-shrink:0;}
+  .icon-btn{
+    width:42px; height:42px; border-radius:13px; border:1.5px solid var(--rule); background:var(--card);
+    display:flex; align-items:center; justify-content:center; font-size:18px; cursor:pointer;
+    transition:transform .12s ease, background .12s ease;
+  }
+  .icon-btn:active{transform:scale(.92);}
+  .icon-btn.bell{color:var(--brand-deep);}
+  .icon-btn.flag{color:var(--bad);}
+
+  /* menu tab */
+  .menu-item{display:flex; align-items:center; gap:12px; padding:13px 4px; border-bottom:1px solid var(--rule);}
+  .menu-item:last-child{border-bottom:none;}
+  .menu-item .item-emoji{font-size:24px;}
+  .menu-tag{font-size:11.5px; color:var(--ink-soft); margin-top:2px;}
+
+  /* bottom nav */
+  .navbar{
+    display:flex; border-top:1px solid var(--rule); background:var(--card); flex-shrink:0;
+    padding:8px 6px calc(6px + env(safe-area-inset-bottom,0));
+  }
+  .nav-btn{
+    flex:1; background:none; border:none; display:flex; flex-direction:column; align-items:center; gap:3px;
+    padding:6px 0; font-family:'Inter',sans-serif; font-size:11px; font-weight:600; color:var(--ink-soft); cursor:pointer;
+  }
+  .nav-btn .nav-icon{font-size:19px;}
+  .nav-btn.active{color:var(--brand-deep);}
+
+  /* modal / overlay */
+  .overlay{
+    position:absolute; inset:0; background:rgba(20,12,6,.42);
+    display:flex; align-items:flex-end; z-index:20; animation:fadeIn .18s ease;
+  }
+  @keyframes fadeIn{from{opacity:0;} to{opacity:1;}}
+  .sheet{
+    background:var(--card); width:100%; border-radius:26px 26px 0 0; padding:26px 24px calc(26px + env(safe-area-inset-bottom,0));
+    animation:slideUp .22s cubic-bezier(.2,.8,.3,1);
+  }
+  @keyframes slideUp{from{transform:translateY(100%);} to{transform:translateY(0);}}
+  .sheet-emoji{font-size:38px; margin-bottom:6px;}
+  .sheet h2{font-size:19px; margin:0 0 6px;}
+  .sheet p{font-size:14px; color:var(--ink-soft); margin:0 0 20px; line-height:1.5;}
+  .sheet textarea{
+    width:100%; border:1.5px solid var(--rule); border-radius:12px; padding:11px 13px; font-family:inherit;
+    font-size:14px; resize:none; margin-bottom:16px; background:var(--paper); color:var(--ink);
+  }
+  .sheet .btn + .btn{margin-top:10px;}
+
+  .result-icon{
+    width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:30px; margin:6px auto 16px;
+  }
+  .center-sheet{text-align:center;}
+  .result-icon.ok{background:var(--ok-tint);}
+  .result-icon.bad{background:var(--bad-tint);}
+
+  /* moderator panel (for triggering error states during testing) */
+  #mod-toggle{
+    position:absolute; bottom:calc(78px + env(safe-area-inset-bottom,0)); right:14px; z-index:30;
+    width:34px; height:34px; border-radius:50%; background:rgba(36,28,22,.35); color:#fff; border:none;
+    font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  #mod-panel{
+    position:absolute; bottom:calc(118px + env(safe-area-inset-bottom,0)); right:14px; z-index:30;
+    background:var(--card); border:1px solid var(--rule); border-radius:14px; padding:10px; box-shadow:var(--shadow);
+    display:none; flex-direction:column; gap:6px; width:220px;
+  }
+  #mod-panel.open{display:flex;}
+  #mod-panel .mtitle{font-size:11px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.03em; padding:2px 4px 4px;}
+  #mod-panel button{
+    text-align:left; background:var(--paper); border:1px solid var(--rule); border-radius:9px; padding:8px 10px;
+    font-size:12.5px; font-family:'Inter',sans-serif; color:var(--ink); cursor:pointer;
+  }
+  #mod-panel button:active{background:var(--brand-tint);}
+
+  #log-count{
+    position:absolute; top:calc(14px + env(safe-area-inset-top,0)); right:14px; z-index:30;
+    font-size:10.5px; font-weight:700; color:var(--ink-soft); background:var(--card); border:1px solid var(--rule);
+    padding:4px 8px; border-radius:99px; opacity:.85; pointer-events:none;
+  }
+</style>
+</head>
+<body>
+
+<div id="shell-outer">
+  <div id="phone">
+    <div id="log-count">0 events</div>
+    <div class="statusbar">
+      <span id="clock">9:41</span>
+      <span class="icons">●●●● 📶 🔋</span>
+    </div>
+    <div id="app"></div>
+    <div class="navbar">
+      <button class="nav-btn" data-nav="home"><span class="nav-icon">🏠</span>Home</button>
+      <button class="nav-btn" data-nav="stock"><span class="nav-icon">📋</span>Stock</button>
+      <button class="nav-btn" data-nav="menu"><span class="nav-icon">🍪</span>Menu</button>
+    </div>
+    <button id="mod-toggle" title="Testing controls">⚙</button>
+    <div id="mod-panel">
+      <div class="mtitle">Show error state</div>
+      <button data-mod="error-load">Couldn't load stock list</button>
+      <button data-mod="error-notify">Couldn't save notification</button>
+      <button data-mod="error-report">Couldn't submit report</button>
+      <div class="mtitle" style="margin-top:4px;">Session</div>
+      <button id="export-btn">⬇ Export navigation log (.json)</button>
+      <button id="reset-btn">↺ Reset session</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------------- data ---------------- */
+const ITEMS = [
+  {id:'cookies',  name:'Cookies',  emoji:'🍪', status:'low'},
+  {id:'sandwich', name:'Sandwich', emoji:'🥪', status:'out'},
+  {id:'chips',    name:'Chips',    emoji:'🍟', status:'in-stock'},
+  {id:'juice',    name:'Juice',    emoji:'🧃', status:'in-stock'},
+  {id:'muffin',   name:'Muffin',   emoji:'🧁', status:'in-stock'},
+];
+const MENU = [
+  {name:'Cookies', emoji:'🍪', tag:'Chocolate chip, assorted'},
+  {name:'Sandwich', emoji:'🥪', tag:'Veg & cheese'},
+  {name:'Chips', emoji:'🍟', tag:'Salted, masala'},
+  {name:'Juice', emoji:'🧃', tag:'Mixed fruit, mango'},
+  {name:'Muffin', emoji:'🧁', tag:'Banana, chocolate'},
+  {name:'Granola Bar', emoji:'🌰', tag:'Oats & honey'},
+  {name:'Wafers', emoji:'🧇', tag:'Chocolate, vanilla'},
+  {name:'Namkeen Pack', emoji:'🥨', tag:'Spicy mix'},
+];
+const STAFFED = true; // toggle to simulate the unstaffed state if you want
+
+const STATUS_LABEL = {'in-stock':'In Stock', 'low':'Low', 'out':'Out'};
+
+/* ---------------- state ---------------- */
+let state = { tab:'home', modal:null, item:null };
+
+/* ---------------- navigation logging ---------------- */
+let sessionLog = [];
+const sessionStart = Date.now();
+function log(type, detail){
+  sessionLog.push({ t: Date.now() - sessionStart, type, ...detail });
+  document.getElementById('log-count').textContent = sessionLog.length + ' events';
+}
+log('session_start', {});
+
+function exportLog(){
+  const payload = {
+    session_started: new Date(sessionStart).toISOString(),
+    duration_ms: Date.now() - sessionStart,
+    events: sessionLog
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'aspretto-session-' + sessionStart + '.json';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+/* ---------------- navigation helpers ---------------- */
+function goTab(tab){
+  state.tab = tab; state.modal = null; state.item = null;
+  log('navigate', {to: tab});
+  render();
+}
+function openModal(modal, item){
+  state.modal = modal; state.item = item || null;
+  log('modal_open', {modal, item: item ? item.name : null});
+  render();
+}
+function closeModal(){
+  log('modal_close', {modal: state.modal});
+  state.modal = null; state.item = null;
+  render();
+}
+function tap(label){ log('tap', {label}); }
+
+/* ---------------- screens ---------------- */
+function screenHome(){
+  return `
+    <div class="screen">
+      <div class="brand-row"><div class="brand-dot">🍪</div><span>Aspretto</span></div>
+      <div class="status-card ${STAFFED ? 'staffed' : 'unstaffed'}">
+        <span class="status-pill">${STAFFED ? '● Staffed' : '● Unstaffed'}</span>
+        <div class="status-headline">${STAFFED ? 'Counter is staffed right now' : 'No one\u2019s at the counter'}</div>
+        <div class="status-sub">${STAFFED ? 'Updated just now' : 'Last confirmed staff sighting: 40 min ago'}</div>
+      </div>
+      <button class="btn btn-primary" onclick="tap('view_stock_list'); goTab('stock')">View Stock List →</button>
+    </div>`;
+}
+
+function screenStock(){
+  const rows = ITEMS.map(it => `
+    <div class="item-row">
+      <div class="item-emoji">${it.emoji}</div>
+      <div class="item-info">
+        <div class="item-name">${it.name}</div>
+        <span class="status-badge ${it.status}">${STATUS_LABEL[it.status]}</span>
+      </div>
+      <div class="row-actions">
+        ${it.status !== 'in-stock' ? `<button class="icon-btn bell" onclick="tap('notify_${it.id}'); openModal('notify', ${JSON.stringify(it).replace(/"/g,'&quot;')})">🔔</button>` : ''}
+        <button class="icon-btn flag" onclick="tap('report_${it.id}'); openModal('report', ${JSON.stringify(it).replace(/"/g,'&quot;')})">🚩</button>
+      </div>
+    </div>`).join('');
+  return `
+    <div class="screen">
+      <div class="brand-row"><div class="brand-dot">🍪</div><span>Aspretto</span></div>
+      <h1 class="h1">Stock List</h1>
+      <div class="updated-row"><p class="sub">Updated 2 min ago</p></div>
+      <div class="card" style="padding:4px 12px;">${rows}</div>
+    </div>`;
+}
+
+function screenMenu(){
+  const rows = MENU.map(m => `
+    <div class="menu-item">
+      <div class="item-emoji">${m.emoji}</div>
+      <div class="item-info">
+        <div class="item-name">${m.name}</div>
+        <div class="menu-tag">${m.tag}</div>
+      </div>
+    </div>`).join('');
+  return `
+    <div class="screen">
+      <div class="brand-row"><div class="brand-dot">🍪</div><span>Aspretto</span></div>
+      <h1 class="h1">Full Menu</h1>
+      <p class="sub">Everything Aspretto carries, stocked or not right now.</p>
+      <div class="card" style="padding:4px 12px;">${rows}</div>
+    </div>`;
+}
+
+/* ---------------- modals ---------------- */
+function modalNotify(item){
+  return `
+    <div class="overlay" onclick="if(event.target===this) {tap('dismiss_notify_backdrop'); closeModal();}">
+      <div class="sheet">
+        <h2>Notify me when ${item.name} restocks?</h2>
+        <p>We'll send an alert as soon as staff update ${item.name} back to In Stock.</p>
+        <button class="btn btn-primary" onclick="tap('confirm_notify_${item.id}'); handleNotifyConfirm(${JSON.stringify(item).replace(/"/g,'&quot;')})">Confirm</button>
+        <button class="btn btn-ghost" onclick="tap('cancel_notify'); closeModal()">Cancel</button>
+      </div>
+    </div>`;
+}
+function modalNotifyConfirmed(item){
+  return `
+    <div class="overlay" onclick="if(event.target===this){closeModal();}">
+      <div class="sheet center-sheet">
+        <div class="result-icon ok">🔔</div>
+        <h2>You're on the list!</h2>
+        <p>We'll ping you the moment ${item.name} is back in stock.</p>
+        <button class="btn btn-primary" onclick="tap('back_from_notify_confirmed'); closeModal()">Back to Stock List</button>
+      </div>
+    </div>`;
+}
+function modalReport(item){
+  return `
+    <div class="overlay" onclick="if(event.target===this){tap('dismiss_report_backdrop'); closeModal();}">
+      <div class="sheet">
+        <h2>Report an issue with ${item.name}?</h2>
+        <p>Let staff know something's off — wrong stock status, empty shelf, anything.</p>
+        <textarea rows="3" placeholder="Details (optional)"></textarea>
+        <button class="btn btn-danger" onclick="tap('submit_report_${item.id}'); handleReportSubmit(${JSON.stringify(item).replace(/"/g,'&quot;')})">Submit Report</button>
+        <button class="btn btn-ghost" onclick="tap('cancel_report'); closeModal()">Cancel</button>
+      </div>
+    </div>`;
+}
+function modalReportReceived(item){
+  return `
+    <div class="overlay" onclick="if(event.target===this){closeModal();}">
+      <div class="sheet center-sheet">
+        <div class="result-icon ok">🚩</div>
+        <h2>Report Sent</h2>
+        <p>${item.name} reported. Thank you!</p>
+        <button class="btn btn-primary" onclick="tap('back_from_report_received'); closeModal()">Back to Stock List</button>
+      </div>
+    </div>`;
+}
+function modalError(kind){
+  const copy = {
+    'error-load':   {title:"Couldn't load stock list.", sub:"Check your connection and try again.", retry:'retry_load', back:'Back to Home', backFn:'goTab(\'home\')'},
+    'error-notify': {title:"Couldn't save notification.", sub:"Something went wrong on our end. Please try again.", retry:'retry_notify', back:'Cancel', backFn:'closeModal()'},
+    'error-report': {title:"Couldn't submit report.", sub:"Your report couldn't be sent. Check your connection and try again.", retry:'retry_report', back:'Cancel', backFn:'closeModal()'},
+  }[kind];
+  return `
+    <div class="overlay" onclick="if(event.target===this){closeModal();}">
+      <div class="sheet center-sheet">
+        <div class="result-icon bad">⚠️</div>
+        <h2>${copy.title}</h2>
+        <p>${copy.sub}</p>
+        <button class="btn btn-primary" onclick="tap('${copy.retry}'); closeModal()">Retry</button>
+        <button class="btn btn-ghost" onclick="tap('error_back'); ${copy.backFn}">${copy.back}</button>
+      </div>
+    </div>`;
+}
+
+function handleNotifyConfirm(item){
+  log('action', {result:'notify_confirmed', item: item.name});
+  state.modal = 'notify-confirmed';
+  render();
+}
+function handleReportSubmit(item){
+  log('action', {result:'report_confirmed', item: item.name});
+  state.modal = 'report-received';
+  render();
+}
+
+/* ---------------- render ---------------- */
+function render(){
+  const app = document.getElementById('app');
+  const screens = {home: screenHome, stock: screenStock, menu: screenMenu};
+  app.innerHTML = screens[state.tab]();
+
+  document.querySelectorAll('.nav-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.nav === state.tab);
+  });
+
+  let modalHtml = '';
+  if(state.modal === 'notify') modalHtml = modalNotify(state.item);
+  else if(state.modal === 'notify-confirmed') modalHtml = modalNotifyConfirmed(state.item);
+  else if(state.modal === 'report') modalHtml = modalReport(state.item);
+  else if(state.modal === 'report-received') modalHtml = modalReportReceived(state.item);
+  else if(state.modal && state.modal.startsWith('error-')) modalHtml = modalError(state.modal);
+
+  const existing = document.getElementById('phone').querySelector('.overlay');
+  if(existing) existing.remove();
+  if(modalHtml){
+    document.getElementById('phone').insertAdjacentHTML('beforeend', modalHtml);
+  }
+}
+
+/* ---------------- wiring ---------------- */
+document.querySelectorAll('.nav-btn').forEach(b=>{
+  b.addEventListener('click', ()=> goTab(b.dataset.nav));
+});
+document.getElementById('mod-toggle').addEventListener('click', ()=>{
+  document.getElementById('mod-panel').classList.toggle('open');
+});
+document.querySelectorAll('#mod-panel [data-mod]').forEach(b=>{
+  b.addEventListener('click', ()=>{
+    log('moderator_trigger', {shown: b.dataset.mod});
+    state.modal = b.dataset.mod;
+    document.getElementById('mod-panel').classList.remove('open');
+    render();
+  });
+});
+document.getElementById('export-btn').addEventListener('click', ()=>{
+  log('export', {});
+  exportLog();
+});
+document.getElementById('reset-btn').addEventListener('click', ()=>{
+  sessionLog = [];
+  document.getElementById('log-count').textContent = '0 events';
+  state = {tab:'home', modal:null, item:null};
+  log('session_reset', {});
+  document.getElementById('mod-panel').classList.remove('open');
+  render();
+});
+
+render();
+</script>
+</body>
+</html>
