@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aspretto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F5F1; --card:#FFFFFF; --line:#E7E1D7;
+    --ink:#201C17; --ink-soft:#726A5F; --ink-faint:#A79E92;
+    --brand:#B8481E; --brand-ink:#7C3013; --brand-tint:#F1E0D4;
+    --ok:#2F7A4F; --ok-tint:#E1F0E6;
+    --warn:#A9720F; --warn-tint:#F5E9D0;
+    --bad:#B23A32; --bad-tint:#F5DDDA;
+    --shadow:0 12px 26px -16px rgba(40,26,14,.32);
+  }
+  :root:not([data-theme="light"]){
+    @media (prefers-color-scheme: dark){
+      --paper:#141210; --card:#1C1814; --line:#302921;
+      --ink:#F0EBE3; --ink-soft:#AFA595; --ink-faint:#726A5F;
+      --brand:#E37A4D; --brand-ink:#F3A47D; --brand-tint:#302119;
+      --ok-tint:#122A1D; --warn-tint:#2C2310; --bad-tint:#2E1A18;
+      --shadow:0 12px 26px -16px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#141210; --card:#1C1814; --line:#302921;
+    --ink:#F0EBE3; --ink-soft:#AFA595; --ink-faint:#726A5F;
+    --brand:#E37A4D; --brand-ink:#F3A47D; --brand-tint:#302119;
+    --ok-tint:#122A1D; --warn-tint:#2C2310; --bad-tint:#2E1A18;
+    --shadow:0 12px 26px -16px rgba(0,0,0,.6);
+  }
+
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:'Manrope',system-ui,-apple-system,sans-serif; display:flex; align-items:center; justify-content:center; padding:env(safe-area-inset-top,0) 16px env(safe-area-inset-bottom,0);}
+  h1,h2{font-weight:800; letter-spacing:-0.01em; margin:0;}
+
+  #shell-outer{width:100%; max-width:400px; height:min(844px,100vh); padding-top:env(safe-area-inset-top,0); padding-bottom:env(safe-area-inset-bottom,0);}
+  #phone{position:relative; width:100%; height:100%; background:var(--paper); border-radius:30px; overflow:hidden; box-shadow:var(--shadow); border:1px solid var(--line); display:flex; flex-direction:column;}
+  @media (min-width:460px){ body{padding:32px 16px;} #shell-outer{height:844px;} }
+
+  .statusbar{display:flex; justify-content:space-between; align-items:center; padding:14px 22px 0; flex-shrink:0;}
+  .statusbar .time{font-size:13px; font-weight:700;}
+  .statusbar .icons{display:flex; gap:5px; align-items:center; color:var(--ink); opacity:.85;}
+
+  #app{flex:1; overflow-y:auto; position:relative; -webkit-overflow-scrolling:touch;}
+  .screen{padding:6px 20px 28px; animation:fadeUp .18s ease;}
+  @keyframes fadeUp{from{opacity:0; transform:translateY(5px);} to{opacity:1; transform:none;}}
+
+  .wordmark{font-size:15px; font-weight:800; letter-spacing:-0.01em; margin:10px 0 20px; display:block;}
+  .h1{font-size:22px; margin:2px 0 3px;}
+  .sub{color:var(--ink-soft); font-size:13px; margin:0 0 18px; line-height:1.5;}
+
+  .btn{border:none; border-radius:10px; font-weight:700; font-family:inherit; font-size:14.5px; padding:14px 16px; width:100%; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:transform .1s ease, opacity .15s ease;}
+  .btn:active{transform:scale(.97);}
+  .btn:disabled{opacity:.5; pointer-events:none;}
+  .btn-primary{background:var(--brand); color:#fff;}
+  .btn-ghost{background:transparent; color:var(--ink); border:1.4px solid var(--line);}
+  .btn-danger{background:transparent; color:var(--bad); border:1.4px solid var(--bad-tint);}
+
+  .card{background:var(--card); border:1px solid var(--line); border-radius:14px;}
+
+  /* home */
+  .status-card{padding:17px 18px; margin-bottom:10px;}
+  .status-row{display:flex; align-items:center; gap:8px; margin-bottom:7px;}
+  .dot{width:7px; height:7px; border-radius:50%; flex-shrink:0;}
+  .status-label{font-size:11.5px; font-weight:800; text-transform:uppercase; letter-spacing:.04em;}
+  .staffed .dot,.staffed .status-label{color:var(--ok);} .staffed .dot{background:var(--ok);}
+  .unstaffed .dot,.unstaffed .status-label{color:var(--bad);} .unstaffed .dot{background:var(--bad);}
+  .status-headline{font-size:16.5px; font-weight:700; margin-bottom:2px;}
+  .status-sub{font-size:12.5px; color:var(--ink-soft);}
+
+  .alert-row{display:flex; align-items:center; gap:11px; padding:13px 14px; border-radius:12px; background:var(--brand-tint); margin-bottom:12px; cursor:pointer;}
+  .alert-row .ic{color:var(--brand-ink); flex-shrink:0; display:flex;}
+  .alert-row .txt{flex:1; font-size:13px; font-weight:700; line-height:1.3;}
+  .alert-row .txt small{display:block; font-weight:500; color:var(--ink-soft); font-size:11.5px; margin-top:1px;}
+
+  .navbar{display:flex; border-top:1px solid var(--line); background:var(--card); flex-shrink:0; padding:7px 6px calc(6px + env(safe-area-inset-bottom,0));}
+  .nav-btn{flex:1; background:none; border:none; display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 0; font-family:inherit; font-size:10px; font-weight:700; color:var(--ink-faint); cursor:pointer;}
+  .nav-btn.active{color:var(--brand);}
+
+  /* catalog list — single row, tap-through pattern, no stacked icon buttons */
+  .cat-heading{font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-faint); margin:16px 2px 7px;}
+  .cat-heading:first-child{margin-top:2px;}
+  .item-row{display:flex; align-items:center; gap:12px; padding:12px 10px; border-radius:12px; cursor:pointer; border:1px solid transparent;}
+  .item-row:active{background:var(--brand-tint);}
+  .item-row + .item-row{margin-top:2px;}
+  .monogram{width:38px; height:38px; border-radius:10px; background:var(--brand-tint); color:var(--brand-ink); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14.5px; flex-shrink:0;}
+  .item-info{flex:1; min-width:0;}
+  .item-top{display:flex; align-items:center; gap:6px;}
+  .veg-mark{width:11px; height:11px; border:1.3px solid var(--ok); border-radius:2px; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .veg-mark::after{content:''; width:4.5px; height:4.5px; border-radius:50%; background:var(--ok);}
+  .item-name{font-weight:700; font-size:14px;}
+  .item-variety{font-size:11.5px; color:var(--ink-soft); margin-top:1px;}
+  .item-right{display:flex; flex-direction:column; align-items:flex-end; gap:4px; flex-shrink:0;}
+  .price{font-size:13px; font-weight:800;}
+  .status-badge{display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:700; padding:2.5px 8px; border-radius:99px;}
+  .status-badge::before{content:''; width:5.5px; height:5.5px; border-radius:50%; background:currentColor;}
+  .status-badge.in-stock{background:var(--ok-tint); color:var(--ok);}
+  .status-badge.low{background:var(--warn-tint); color:var(--warn);}
+  .status-badge.out{background:var(--bad-tint); color:var(--bad);}
+  .chevron-ic{color:var(--ink-faint); flex-shrink:0;}
+
+  /* activity */
+  .seg{display:flex; background:var(--card); border:1px solid var(--line); border-radius:11px; padding:3px; margin-bottom:14px;}
+  .seg button{flex:1; border:none; background:none; padding:9px 4px; font-family:inherit; font-size:12px; font-weight:700; color:var(--ink-soft); border-radius:8px; cursor:pointer;}
+  .seg button.active{background:var(--brand); color:#fff;}
+  .activity-item{display:flex; align-items:center; gap:11px; padding:13px 14px; border:1px solid var(--line); border-radius:13px; margin-bottom:8px; background:var(--card);}
+  .activity-item.tappable{cursor:pointer;}
+  .activity-item.tappable:active{background:var(--brand-tint);}
+  .activity-main{flex:1; min-width:0;}
+  .activity-top{display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:2px;}
+  .activity-name{font-weight:700; font-size:13.5px;}
+  .chip{font-size:10px; font-weight:800; padding:2.5px 8px; border-radius:99px; text-transform:uppercase; letter-spacing:.01em; flex-shrink:0;}
+  .chip.pending{background:var(--warn-tint); color:var(--warn);}
+  .chip.ready{background:var(--ok-tint); color:var(--ok);}
+  .chip.done{background:var(--line); color:var(--ink-faint);}
+  .chip.cancelled{background:var(--bad-tint); color:var(--bad);}
+  .chip.new{background:var(--bad-tint); color:var(--bad);}
+  .chip.resolved{background:var(--ok-tint); color:var(--ok);}
+  .activity-sub{font-size:11.5px; color:var(--ink-soft);}
+  .empty-state{text-align:center; padding:46px 20px; color:var(--ink-faint);}
+  .empty-state .ic{margin-bottom:9px; display:flex; justify-content:center; opacity:.55;}
+  .empty-state p{font-size:13px; margin:0;}
+
+  /* sheet */
+  .overlay{position:absolute; inset:0; background:rgba(18,12,7,.42); display:flex; align-items:flex-end; z-index:20; animation:fadeIn .15s ease;}
+  @keyframes fadeIn{from{opacity:0;} to{opacity:1;}}
+  .sheet{background:var(--card); width:100%; border-radius:20px 20px 0 0; padding:8px 22px calc(22px + env(safe-area-inset-bottom,0)); animation:slideUp .19s cubic-bezier(.2,.8,.3,1); max-height:88%; overflow-y:auto;}
+  @keyframes slideUp{from{transform:translateY(100%);} to{transform:translateY(0);}}
+  .sheet-head{display:flex; align-items:center; justify-content:space-between; padding:10px 0 6px;}
+  .sheet-head button{background:none; border:none; cursor:pointer; color:var(--ink-soft); display:flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:8px;}
+  .sheet-head button:active{background:var(--paper);}
+
+  .sheet-item-head{display:flex; align-items:center; gap:12px; margin:2px 0 16px;}
+  .sheet-item-head .monogram{width:46px; height:46px; font-size:17px; border-radius:12px;}
+  .sheet-item-head h2{font-size:17px;}
+  .sheet-item-head .item-variety{font-size:12.5px;}
+
+  .detail-meta{display:flex; align-items:center; gap:8px; padding:12px 14px; background:var(--paper); border-radius:11px; margin-bottom:18px; font-size:12.5px;}
+  .detail-meta .price{font-size:15px;}
+  .detail-meta .sep{color:var(--line); flex:0;}
+  .detail-meta .grow{flex:1;}
+  .detail-meta .eta{color:var(--ink-soft); display:flex; align-items:center; gap:4px;}
+
+  .action-list{border:1px solid var(--line); border-radius:13px; overflow:hidden; margin-bottom:6px;}
+  .action-row{width:100%; display:flex; align-items:center; gap:12px; padding:14px 14px; background:var(--card); border:none; border-bottom:1px solid var(--line); cursor:pointer; font-family:inherit; text-align:left;}
+  .action-row:last-child{border-bottom:none;}
+  .action-row:active{background:var(--paper);}
+  .action-ic{width:32px; height:32px; border-radius:9px; background:var(--brand-tint); color:var(--brand-ink); display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .action-label{flex:1; font-size:14px; font-weight:700;}
+
+  .center-flow{text-align:center; padding:6px 2px 4px;}
+  .flow-ic{width:44px; height:44px; border-radius:13px; display:flex; align-items:center; justify-content:center; margin:0 auto 14px;}
+  .flow-ic.ok{background:var(--ok-tint); color:var(--ok);}
+  .flow-ic.bad{background:var(--bad-tint); color:var(--bad);}
+  .flow-ic.brand{background:var(--brand-tint); color:var(--brand-ink);}
+  .center-flow h2{font-size:17px; margin-bottom:6px;}
+  .center-flow p{font-size:13px; color:var(--ink-soft); margin:0 0 18px; line-height:1.5;}
+
+  textarea, input[type=text]{width:100%; border:1.3px solid var(--line); border-radius:10px; padding:11px 12px; font-family:inherit; font-size:13.5px; resize:none; margin-bottom:14px; background:var(--paper); color:var(--ink);}
+  .stepper{display:flex; align-items:center; justify-content:center; gap:18px; margin:4px 0 16px;}
+  .stepper button{width:36px; height:36px; border-radius:10px; border:1.3px solid var(--line); background:var(--paper); color:var(--ink); font-size:17px; font-weight:700; cursor:pointer;}
+  .stepper span{font-size:19px; font-weight:800; min-width:22px; text-align:center;}
+  .price-row{display:flex; justify-content:space-between; align-items:center; padding:12px 14px; background:var(--paper); border-radius:10px; margin-bottom:14px; font-size:13.5px;}
+  .price-row strong{font-size:15px;}
+  .pickup-code{font-size:24px; font-weight:800; letter-spacing:.07em; color:var(--brand-ink); margin:8px 0 3px;}
+  .note{font-size:11px; color:var(--ink-faint); margin:0 0 18px;}
+  .btn + .btn{margin-top:9px;}
+
+  #diag-toggle{position:absolute; bottom:calc(72px + env(safe-area-inset-bottom,0)); right:12px; z-index:30; width:26px; height:26px; border-radius:50%; background:rgba(32,28,23,.25); color:#fff; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; opacity:.5;}
+  #diag-panel{position:absolute; bottom:calc(104px + env(safe-area-inset-bottom,0)); right:12px; z-index:30; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:8px; box-shadow:var(--shadow); display:none; flex-direction:column; gap:5px; width:206px;}
+  #diag-panel.open{display:flex;}
+  #diag-panel .mtitle{font-size:10px; font-weight:800; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.03em; padding:2px 4px 3px;}
+  #diag-panel button{text-align:left; background:var(--paper); border:1px solid var(--line); border-radius:7px; padding:7px 9px; font-size:11.5px; font-family:inherit; color:var(--ink); cursor:pointer;}
+</style>
+</head>
+<body>
+<div id="shell-outer"><div id="phone">
+  <div class="statusbar">
+    <span class="time" id="clock">9:41</span>
+    <span class="icons">
+      <svg width="15" height="10" viewBox="0 0 16 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="0.6"/><rect x="4.5" y="5" width="3" height="6" rx="0.6"/><rect x="9" y="3" width="3" height="8" rx="0.6"/><rect x="13.5" y="0" width="2.5" height="11" rx="0.6"/></svg>
+      <svg width="24" height="11" viewBox="0 0 24 11" fill="none"><rect x="1" y="1" width="19" height="9" rx="2.2" stroke="currentColor" stroke-width="1.2"/><rect x="21.3" y="3.3" width="1.5" height="4.4" rx="0.6" fill="currentColor"/><rect x="2.4" y="2.4" width="14.5" height="6.2" rx="1.1" fill="currentColor"/></svg>
+    </span>
+  </div>
+  <div id="app"></div>
+  <div class="navbar">
+    <button class="nav-btn" data-nav="home"></button>
+    <button class="nav-btn" data-nav="catalog"></button>
+    <button class="nav-btn" data-nav="activity"></button>
+  </div>
+  <button id="diag-toggle" title="diagnostics"></button>
+  <div id="diag-panel">
+    <div class="mtitle">Show error state</div>
+    <button data-mod="error-load">Couldn't load catalog</button>
+    <button data-mod="error-notify">Couldn't save notification</button>
+    <button data-mod="error-report">Couldn't submit report</button>
+    <button data-mod="error-order">Couldn't place pre-order</button>
+    <div class="mtitle" style="margin-top:4px;">Session</div>
+    <button id="export-btn">Export navigation log</button>
+    <button id="reset-btn">Reset local data</button>
+  </div>
+</div></div>
+
+<script>
+/* ---------- icon set (line icons only, no emoji) ---------- */
+const ICONS = {
+  home:'<path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9a1 1 0 0 0 1 1h3v-6h4v6h3a1 1 0 0 0 1-1v-9"/>',
+  grid:'<rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/>',
+  activity:'<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5l3.2 1.8"/>',
+  bell:'<path d="M6.5 10a5.5 5.5 0 0 1 11 0c0 4 1.3 5 1.3 5H5.2S6.5 14 6.5 10Z"/><path d="M10 19a2 2 0 0 0 4 0"/>',
+  flag:'<path d="M6 3v18"/><path d="M6 4.2h9.5l-1.8 3.6 1.8 3.6H6"/>',
+  bag:'<path d="M6 8h12l-1 12.5H7L6 8Z"/><path d="M9 8V6.3a3 3 0 0 1 6 0V8"/>',
+  check:'<circle cx="12" cy="12" r="9"/><path d="M8 12.3l2.6 2.6L16 9.3"/>',
+  alert:'<path d="M12 3 2.5 20h19L12 3Z"/><path d="M12 9.7v4"/><circle cx="12" cy="16.6" r=".2" fill="currentColor"/>',
+  chevron:'<path d="M9 6l6 6-6 6"/>',
+  back:'<path d="M15 6L9 12l6 6"/>',
+  x:'<path d="M6 6l12 12"/><path d="M18 6L6 18"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  cog:'<circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v2.6M12 18.9v2.6M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M2.5 12h2.6M18.9 12h2.6M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/>',
+};
+function icon(name,size=20,strokeW=1.8){ return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${strokeW}" stroke-linecap="round" stroke-linejoin="round">${ICONS[name]||''}</svg>`; }
+document.querySelector('[data-nav="home"]').innerHTML = icon('home',18)+'<span>Home</span>';
+document.querySelector('[data-nav="catalog"]').innerHTML = icon('grid',18)+'<span>Catalog</span>';
+document.querySelector('[data-nav="activity"]').innerHTML = icon('activity',18)+'<span>Activity</span>';
+document.getElementById('diag-toggle').innerHTML = icon('cog',14);
+document.querySelectorAll('.nav-btn').forEach(b=>b.style.cssText+='display:flex;flex-direction:column;align-items:center;gap:3px;');
+
+/* ---------- shared local "backend" ---------- */
+const LS = { catalog:'aspretto_catalog', staffed:'aspretto_staffed', preorders:'aspretto_preorders', reports:'aspretto_reports', notifies:'aspretto_notifies' };
+const DEFAULT_CATALOG = [
+  {id:'cookies',  name:'Cookies',   category:'Snacks',    variety:'Chocolate chip', veg:true, price:20, status:'low', qty:3,  eta:'~2 hrs'},
+  {id:'sandwich', name:'Sandwich',  category:'Snacks',    variety:'Veg & cheese',   veg:true, price:40, status:'out', qty:0,  eta:'Tomorrow, 9 AM'},
+  {id:'chips',    name:'Chips',     category:'Snacks',    variety:'Masala',         veg:true, price:20, status:'in-stock', qty:18},
+  {id:'muffin',   name:'Muffin',    category:'Snacks',    variety:'Banana',         veg:true, price:35, status:'in-stock', qty:9},
+  {id:'granola',  name:'Granola Bar',category:'Snacks',   variety:'Oats & honey',   veg:true, price:25, status:'in-stock', qty:14},
+  {id:'wafers',   name:'Wafers',    category:'Snacks',    variety:'Chocolate',      veg:true, price:15, status:'in-stock', qty:30},
+  {id:'namkeen',  name:'Namkeen Pack',category:'Snacks',  variety:'Spicy mix',      veg:true, price:20, status:'low', qty:4, eta:'~2 hrs'},
+  {id:'juice',    name:'Juice',     category:'Beverages', variety:'Mixed fruit',    veg:true, price:30, status:'in-stock', qty:22},
+];
+function loadJSON(k,f){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):f; }catch(e){ return f; } }
+function saveJSON(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+function getCatalog(){ let c=loadJSON(LS.catalog,null); if(!c){ c=DEFAULT_CATALOG; saveJSON(LS.catalog,c); } return c; }
+function getStaffed(){ const v=localStorage.getItem(LS.staffed); return v===null?true:v==='true'; }
+function getPreorders(){ return loadJSON(LS.preorders,[]); }
+function getReports(){ return loadJSON(LS.reports,[]); }
+function getNotifies(){ return loadJSON(LS.notifies,[]); }
+const STATUS_LABEL = {'in-stock':'In Stock','low':'Low','out':'Out'};
+function genCode(){ return Math.floor(1000+Math.random()*9000).toString(); }
+function initial(name){ return name.charAt(0).toUpperCase(); }
+
+/* ---------- nav logging ---------- */
+let sessionLog=[]; const sessionStart=Date.now();
+function log(type,detail){ sessionLog.push({t:Date.now()-sessionStart, type, ...detail}); }
+log('session_start',{});
+function exportLog(){
+  const payload={session_started:new Date(sessionStart).toISOString(), duration_ms:Date.now()-sessionStart, events:sessionLog};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob); const a=document.createElement('a');
+  a.href=url; a.download='aspretto-session-'+sessionStart+'.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+}
+
+/* ---------- state ----------
+   sheet shapes:
+   {kind:'item', step:'detail'|'notify'|'notify-done'|'report'|'report-done'|'preorder'|'preorder-done', item, qty, pickupName}
+   {kind:'order', order}   {kind:'alert', rec}   {kind:'error', which}
+*/
+let state = { tab:'home', activitySeg:'orders', sheet:null };
+
+function goTab(tab){ state.tab=tab; state.sheet=null; log('navigate',{to:tab}); render(); }
+function tap(label){ log('tap',{label}); }
+function openItem(item){ state.sheet={kind:'item', step:'detail', item, qty:1, pickupName:''}; log('open_item_detail',{item:item.name}); render(); }
+function itemStep(step){ state.sheet.step=step; log('sheet_step',{step}); render(); }
+function openOrder(order){ state.sheet={kind:'order', order}; log('open_order_detail',{id:order.id}); render(); }
+function openAlert(rec){ state.sheet={kind:'alert', rec}; log('open_alert_detail',{id:rec.id}); render(); }
+function closeSheet(){ log('sheet_close',{}); state.sheet=null; render(); }
+
+/* ---------- screens ---------- */
+function screenHome(){
+  const staffed=getStaffed();
+  const activeNotifies=getNotifies().filter(n=>n.status==='active');
+  const activeOrders=getPreorders().filter(o=>o.status==='pending'||o.status==='ready');
+  const activeCount=activeNotifies.length+activeOrders.length;
+  return `
+    <div class="screen">
+      <span class="wordmark">Aspretto</span>
+      <div class="status-card card ${staffed?'staffed':'unstaffed'}">
+        <div class="status-row"><span class="dot"></span><span class="status-label">${staffed?'Staffed':'Unstaffed'}</span></div>
+        <div class="status-headline">${staffed?'Counter is staffed right now':'No one\u2019s at the counter'}</div>
+        <div class="status-sub">${staffed?'Updated just now':'Last confirmed: 40 min ago'}</div>
+      </div>
+      ${activeCount>0 ? `
+      <div class="alert-row" onclick="tap('home_alert_tap'); goTab('activity')">
+        <span class="ic">${icon('bell',17)}</span>
+        <div class="txt">${activeCount} active alert${activeCount>1?'s':''}<small>Pre-orders & restock notifications</small></div>
+        <span class="ic">${icon('chevron',15)}</span>
+      </div>` : ``}
+      <button class="btn btn-primary" onclick="tap('view_catalog'); goTab('catalog')">Browse Catalog</button>
+    </div>`;
+}
+
+function screenCatalog(){
+  const items=getCatalog();
+  const cats=[...new Set(items.map(i=>i.category))];
+  const rows = cats.map(cat => `
+    <div class="cat-heading">${cat}</div>
+    ${items.filter(i=>i.category===cat).map(it => `
+      <div class="item-row" onclick='tap("open_${it.id}"); openItem(${JSON.stringify(it)})'>
+        <div class="monogram">${initial(it.name)}</div>
+        <div class="item-info">
+          <div class="item-top">${it.veg?'<span class="veg-mark"></span>':''}<span class="item-name">${it.name}</span></div>
+          <div class="item-variety">${it.variety}</div>
+        </div>
+        <div class="item-right">
+          <span class="price">\u20B9${it.price}</span>
+          <span class="status-badge ${it.status}">${STATUS_LABEL[it.status]}</span>
+        </div>
+        <span class="chevron-ic">${icon('chevron',16)}</span>
+      </div>`).join('')}
+  `).join('');
+  return `
+    <div class="screen">
+      <span class="wordmark">Aspretto</span>
+      <h1 class="h1">Catalog</h1>
+      <p class="sub">Tap an item for details, alerts, pre-order, or to report an issue.</p>
+      ${rows}
+    </div>`;
+}
+
+function screenActivity(){
+  const seg=state.activitySeg;
+  const orders=getPreorders(), notifies=getNotifies(), reports=getReports();
+  let body='';
+  if(seg==='orders'){
+    body = orders.length ? orders.slice().reverse().map(o => {
+      const tappable = o.status==='pending' || o.status==='ready';
+      const chipClass = o.status==='pending'?'pending':o.status==='ready'?'ready':o.status==='cancelled'?'cancelled':'done';
+      const chipLabel = {pending:'Pending', ready:'Ready', picked_up:'Picked up', cancelled:'Cancelled'}[o.status];
+      return `<div class="activity-item ${tappable?'tappable':''}" ${tappable?`onclick='tap("open_order"); openOrder(${JSON.stringify(o)})'`:''}>
+        <div class="activity-main">
+          <div class="activity-top"><span class="activity-name">${o.itemName} \u00d7${o.qty}</span><span class="chip ${chipClass}">${chipLabel}</span></div>
+          <div class="activity-sub">Code ${o.pickupCode} \u00b7 \u20B9${o.price*o.qty}</div>
+        </div>
+        ${tappable ? `<span class="chevron-ic">${icon('chevron',15)}</span>` : ''}
+      </div>`;
+    }).join('') : emptyState('bag','No pre-orders yet');
+  } else if(seg==='alerts'){
+    body = notifies.length ? notifies.slice().reverse().map(n => {
+      const tappable = n.status==='active';
+      const chipClass = n.status==='active'?'pending':n.status==='cancelled'?'cancelled':'done';
+      const chipLabel = {active:'Active', fulfilled:'Fulfilled', cancelled:'Cancelled'}[n.status];
+      return `<div class="activity-item ${tappable?'tappable':''}" ${tappable?`onclick='tap("open_alert"); openAlert(${JSON.stringify(n)})'`:''}>
+        <div class="activity-main">
+          <div class="activity-top"><span class="activity-name">${n.itemName}</span><span class="chip ${chipClass}">${chipLabel}</span></div>
+          <div class="activity-sub">${n.status==='active' ? "We'll ping you when it restocks" : n.status==='fulfilled' ? 'Restocked \u2014 alert sent' : 'You cancelled this alert'}</div>
+        </div>
+        ${tappable ? `<span class="chevron-ic">${icon('chevron',15)}</span>` : ''}
+      </div>`;
+    }).join('') : emptyState('bell','No restock alerts set');
+  } else {
+    body = reports.length ? reports.slice().reverse().map(r => `
+      <div class="activity-item">
+        <div class="activity-main">
+          <div class="activity-top"><span class="activity-name">${r.itemName}</span><span class="chip ${r.status==='new'?'new':'resolved'}">${r.status==='new'?'Submitted':'Resolved'}</span></div>
+          <div class="activity-sub">${r.note ? r.note : 'No details added'}</div>
+        </div>
+      </div>`).join('') : emptyState('flag','No reports submitted');
+  }
+  return `
+    <div class="screen">
+      <span class="wordmark">Aspretto</span>
+      <h1 class="h1">Activity</h1>
+      <p class="sub">Your pre-orders, alerts, and reports.</p>
+      <div class="seg">
+        <button class="${seg==='orders'?'active':''}" onclick="tap('seg_orders'); state.activitySeg='orders'; render()">Orders</button>
+        <button class="${seg==='alerts'?'active':''}" onclick="tap('seg_alerts'); state.activitySeg='alerts'; render()">Alerts</button>
+        <button class="${seg==='reports'?'active':''}" onclick="tap('seg_reports'); state.activitySeg='reports'; render()">Reports</button>
+      </div>
+      ${body}
+    </div>`;
+}
+function emptyState(iconName,text){ return `<div class="empty-state"><div class="ic">${icon(iconName,28)}</div><p>${text}</p></div>`; }
+
+/* ---------- item sheet steps ---------- */
+function sheetHead(showBack){
+  return `<div class="sheet-head">
+    ${showBack ? `<button onclick="tap('sheet_back'); itemStep('detail')">${icon('back',18)}</button>` : `<span></span>`}
+    <button onclick="tap('sheet_close'); closeSheet()">${icon('x',18)}</button>
+  </div>`;
+}
+function itemDetailStep(item){
+  const actions = [];
+  if(item.status !== 'in-stock') actions.push({step:'notify', ic:'bell', label:'Set restock alert'});
+  actions.push({step:'preorder', ic:'bag', label:'Pre-order this item'});
+  actions.push({step:'report', ic:'flag', label:'Report an issue'});
+  return `
+    ${sheetHead(false)}
+    <div class="sheet-item-head">
+      <div class="monogram">${initial(item.name)}</div>
+      <div><h2>${item.name}</h2><div class="item-variety">${item.variety}${item.veg?' \u00b7 Veg':''}</div></div>
+    </div>
+    <div class="detail-meta">
+      <span class="price">\u20B9${item.price}</span>
+      <span class="sep">\u00b7</span>
+      <span class="status-badge ${item.status}">${STATUS_LABEL[item.status]}</span>
+      <span class="grow"></span>
+      ${item.status==='in-stock' ? `<span class="eta">${item.qty} left</span>` : `<span class="eta">${icon('clock',13)} ${item.eta||'\u2014'}</span>`}
+    </div>
+    <div class="action-list">
+      ${actions.map(a => `<button class="action-row" onclick='tap("action_${a.step}_${item.id}"); itemStep("${a.step}")'>
+        <span class="action-ic">${icon(a.ic,16)}</span><span class="action-label">${a.label}</span>${icon('chevron',15)}
+      </button>`).join('')}
+    </div>`;
+}
+function notifyStep(item){
+  return `${sheetHead(true)}
+    <div class="center-flow">
+      <div class="flow-ic brand">${icon('bell',19)}</div>
+      <h2>Notify me when ${item.name} restocks?</h2>
+      <p>We'll send an alert the moment staff update it back to In Stock.</p>
+      <button class="btn btn-primary" onclick='tap("confirm_notify_${item.id}"); handleNotifyConfirm(${JSON.stringify(item)})'>Confirm</button>
+      <button class="btn btn-ghost" onclick="tap('cancel_notify'); itemStep('detail')">Back</button>
+    </div>`;
+}
+function notifyDoneStep(item){
+  return `<div class="center-flow">
+      <div class="flow-ic ok">${icon('check',19)}</div>
+      <h2>You're on the list</h2>
+      <p>We'll ping you the moment ${item.name} is back in stock.</p>
+      <button class="btn btn-primary" onclick="tap('done_notify'); closeSheet()">Done</button>
+    </div>`;
+}
+function reportStep(item){
+  return `${sheetHead(true)}
+    <div class="center-flow" style="text-align:left;">
+      <div class="flow-ic brand">${icon('flag',19)}</div>
+      <h2>Report an issue with ${item.name}</h2>
+      <p>Wrong stock status, empty shelf, anything staff should know.</p>
+      <textarea rows="3" id="report-note" placeholder="Details (optional)"></textarea>
+      <button class="btn btn-primary" onclick='tap("submit_report_${item.id}"); handleReportSubmit(${JSON.stringify(item)})'>Submit Report</button>
+      <button class="btn btn-ghost" onclick="tap('cancel_report'); itemStep('detail')">Back</button>
+    </div>`;
+}
+function reportDoneStep(item){
+  return `<div class="center-flow">
+      <div class="flow-ic ok">${icon('check',19)}</div>
+      <h2>Report sent</h2>
+      <p>${item.name} reported. Track its status under Activity \u2192 Reports.</p>
+      <button class="btn btn-primary" onclick="tap('done_report'); closeSheet()">Done</button>
+    </div>`;
+}
+function preorderStep(item, qty){
+  const total = item.price*qty;
+  return `${sheetHead(true)}
+    <div class="center-flow" style="text-align:left;">
+      <div class="flow-ic brand">${icon('bag',19)}</div>
+      <h2>Pre-order ${item.name}</h2>
+      <p>Reserve it now, pay ahead, skip the wait at the counter.</p>
+      <div class="stepper">
+        <button onclick="tap('qty_minus'); state.sheet.qty=Math.max(1,state.sheet.qty-1); render()">\u2212</button>
+        <span>${qty}</span>
+        <button onclick="tap('qty_plus'); state.sheet.qty=Math.min(9,state.sheet.qty+1); render()">+</button>
+      </div>
+      <input type="text" id="pickup-name" placeholder="Your name, for pickup" value="${state.sheet.pickupName}">
+      <div class="price-row"><span>Total</span><strong>\u20B9${total}</strong></div>
+      <button class="btn btn-primary" id="pay-btn" onclick='tap("pay_${item.id}"); handlePreorderPay(${JSON.stringify(item)})'>Pay & Reserve</button>
+      <button class="btn btn-ghost" onclick="tap('cancel_preorder'); itemStep('detail')">Back</button>
+    </div>`;
+}
+function preorderDoneStep(order){
+  return `<div class="center-flow">
+      <div class="flow-ic ok">${icon('check',19)}</div>
+      <h2>Order reserved</h2>
+      <p>Show this code at the counter.</p>
+      <div class="pickup-code">${order.pickupCode}</div>
+      <p class="note">${order.itemName} \u00d7${order.qty} \u00b7 \u20B9${order.price*order.qty} \u00b7 usually ready in 15\u201320 min</p>
+      <button class="btn btn-primary" onclick="tap('done_preorder'); closeSheet()">Done</button>
+    </div>`;
+}
+
+/* ---------- order / alert detail sheets ---------- */
+function orderDetailSheet(order){
+  const canCancel = order.status==='pending';
+  return `${sheetHead(false)}
+    <div class="center-flow">
+      <div class="flow-ic brand">${icon('bag',19)}</div>
+      <h2>${order.itemName} \u00d7${order.qty}</h2>
+      <p>Placed ${new Date(order.placedAt).toLocaleString()}</p>
+      <div class="pickup-code">${order.pickupCode}</div>
+      <p class="note">\u20B9${order.price*order.qty} \u00b7 for ${order.pickupName} \u00b7 status: ${order.status==='pending'?'Pending':'Ready for pickup'}</p>
+      ${canCancel ? `<button class="btn btn-danger" onclick='tap("cancel_order_${order.id}"); cancelOrder(${order.id})'>Cancel order</button>` : ''}
+      <button class="btn btn-ghost" onclick="tap('close_order_detail'); closeSheet()">Close</button>
+    </div>`;
+}
+function alertDetailSheet(rec){
+  return `${sheetHead(false)}
+    <div class="center-flow">
+      <div class="flow-ic brand">${icon('bell',19)}</div>
+      <h2>${rec.itemName}</h2>
+      <p>Set ${new Date(rec.createdAt).toLocaleString()} \u2014 we'll notify you when it's back in stock.</p>
+      <button class="btn btn-danger" onclick='tap("cancel_alert_${rec.id}"); cancelAlert(${rec.id})'>Cancel alert</button>
+      <button class="btn btn-ghost" onclick="tap('close_alert_detail'); closeSheet()">Close</button>
+    </div>`;
+}
+
+/* ---------- error sheet ---------- */
+function errorSheet(kind){
+  const copy = {
+    'error-load':{title:"Couldn't load catalog.", sub:"Check your connection and try again.", back:'Back to Home', backFn:"goTab('home')"},
+    'error-notify':{title:"Couldn't save notification.", sub:"Something went wrong on our end. Please try again.", back:'Cancel', backFn:'closeSheet()'},
+    'error-report':{title:"Couldn't submit report.", sub:"Your report couldn't be sent. Check your connection and try again.", back:'Cancel', backFn:'closeSheet()'},
+    'error-order':{title:"Couldn't place pre-order.", sub:"Payment didn't go through. Nothing was charged.", back:'Cancel', backFn:'closeSheet()'},
+  }[kind];
+  return `<div class="center-flow">
+      <div class="flow-ic bad">${icon('alert',19)}</div>
+      <h2>${copy.title}</h2>
+      <p>${copy.sub}</p>
+      <button class="btn btn-primary" onclick="tap('retry_${kind}'); closeSheet()">Retry</button>
+      <button class="btn btn-ghost" onclick="tap('error_back'); ${copy.backFn}">${copy.back}</button>
+    </div>`;
+}
+
+/* ---------- handlers ---------- */
+function handleNotifyConfirm(item){
+  const list=getNotifies(); list.push({id:Date.now(), itemId:item.id, itemName:item.name, status:'active', createdAt:Date.now()});
+  saveJSON(LS.notifies,list); log('action',{result:'notify_confirmed', item:item.name});
+  state.sheet.step='notify-done'; render();
+}
+function handleReportSubmit(item){
+  const note = document.getElementById('report-note') ? document.getElementById('report-note').value : '';
+  const list=getReports(); list.push({id:Date.now(), itemId:item.id, itemName:item.name, note, status:'new', reportedAt:Date.now()});
+  saveJSON(LS.reports,list); log('action',{result:'report_confirmed', item:item.name});
+  state.sheet.step='report-done'; render();
+}
+function handlePreorderPay(item){
+  const nameInput=document.getElementById('pickup-name');
+  state.sheet.pickupName = nameInput ? (nameInput.value || 'Guest') : 'Guest';
+  const btn=document.getElementById('pay-btn');
+  if(btn){ btn.disabled=true; btn.textContent='Processing\u2026'; }
+  setTimeout(()=>{
+    const order={id:Date.now(), itemId:item.id, itemName:item.name, qty:state.sheet.qty, price:item.price, pickupName:state.sheet.pickupName, pickupCode:genCode(), status:'pending', placedAt:Date.now()};
+    const list=getPreorders(); list.push(order); saveJSON(LS.preorders,list);
+    log('action',{result:'preorder_confirmed', item:item.name, qty:order.qty});
+    state.sheet.step='preorder-done'; state.sheet.order=order; render();
+  }, 650);
+}
+function cancelOrder(id){
+  const list=getPreorders(); const o=list.find(x=>x.id===id); if(o) o.status='cancelled';
+  saveJSON(LS.preorders,list); log('action',{result:'order_cancelled', id});
+  closeSheet();
+}
+function cancelAlert(id){
+  const list=getNotifies(); const n=list.find(x=>x.id===id); if(n) n.status='cancelled';
+  saveJSON(LS.notifies,list); log('action',{result:'alert_cancelled', id});
+  closeSheet();
+}
+
+/* ---------- render ---------- */
+function render(){
+  const app=document.getElementById('app');
+  const screens={home:screenHome, catalog:screenCatalog, activity:screenActivity};
+  app.innerHTML = screens[state.tab]();
+  document.querySelectorAll('.nav-btn').forEach(b=> b.classList.toggle('active', b.dataset.nav===state.tab));
+
+  const existing = document.getElementById('phone').querySelector('.overlay');
+  if(existing) existing.remove();
+
+  if(!state.sheet) return;
+  let inner='';
+  const s=state.sheet;
+  if(s.kind==='item'){
+    if(s.step==='detail') inner=itemDetailStep(s.item);
+    else if(s.step==='notify') inner=notifyStep(s.item);
+    else if(s.step==='notify-done') inner=notifyDoneStep(s.item);
+    else if(s.step==='report') inner=reportStep(s.item);
+    else if(s.step==='report-done') inner=reportDoneStep(s.item);
+    else if(s.step==='preorder') inner=preorderStep(s.item, s.qty);
+    else if(s.step==='preorder-done') inner=preorderDoneStep(s.order);
+  } else if(s.kind==='order'){ inner=orderDetailSheet(s.order); }
+  else if(s.kind==='alert'){ inner=alertDetailSheet(s.rec); }
+  else if(s.kind==='error'){ inner=errorSheet(s.which); }
+
+  document.getElementById('phone').insertAdjacentHTML('beforeend',
+    `<div class="overlay" onclick="if(event.target===this){tap('dismiss_backdrop'); closeSheet();}"><div class="sheet">${inner}</div></div>`);
+}
+
+document.querySelectorAll('.nav-btn').forEach(b=> b.addEventListener('click', ()=> goTab(b.dataset.nav)));
+document.getElementById('diag-toggle').addEventListener('click', ()=> document.getElementById('diag-panel').classList.toggle('open'));
+document.querySelectorAll('#diag-panel [data-mod]').forEach(b=> b.addEventListener('click', ()=>{
+  log('moderator_trigger',{shown:b.dataset.mod}); state.sheet={kind:'error', which:b.dataset.mod};
+  document.getElementById('diag-panel').classList.remove('open'); render();
+}));
+document.getElementById('export-btn').addEventListener('click', ()=>{ log('export',{}); exportLog(); });
+document.getElementById('reset-btn').addEventListener('click', ()=>{
+  [LS.catalog,LS.staffed,LS.preorders,LS.reports,LS.notifies].forEach(k=>localStorage.removeItem(k));
+  sessionLog=[]; state={tab:'home', activitySeg:'orders', sheet:null};
+  log('session_reset',{}); document.getElementById('diag-panel').classList.remove('open'); render();
+});
+
+render();
+</script>
+</body>
+</html>
