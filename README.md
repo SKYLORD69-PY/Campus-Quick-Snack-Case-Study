@@ -15,6 +15,11 @@ Built as a single scrolling page in plain HTML and CSS — no JavaScript, no fra
 
 https://skylord69-py.github.io/Campus-Quick-Snack-Case-Study/
 
+## Final prototype
+
+- [Aspretto user experience](final/index.html)
+- [Aspretto staff interface](final/admin/index.html)
+
 ## What's inside
 
 ```
