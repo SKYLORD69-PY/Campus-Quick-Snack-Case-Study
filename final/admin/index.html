@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aspretto — Staff</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F5F1; --card:#FFFFFF; --line:#E9E3D9;
+    --ink:#221E19; --ink-soft:#776E63; --ink-faint:#A79E92;
+    --brand:#B8481E; --brand-ink:#7C3013; --brand-tint:#F3E1D6;
+    --ok:#2F7A4F; --ok-tint:#E1F0E6;
+    --warn:#A9720F; --warn-tint:#F5E9D0;
+    --bad:#B23A32; --bad-tint:#F5DDDA;
+  }
+  :root:not([data-theme="light"]){
+    @media (prefers-color-scheme: dark){
+      --paper:#15130F; --card:#1E1A15; --line:#332C23; --ink:#F2EDE5; --ink-soft:#B3A99C; --ink-faint:#776E63;
+      --brand:#E37A4D; --brand-ink:#F3A47D; --brand-tint:#33231A; --ok-tint:#132A1E; --warn-tint:#2F2412; --bad-tint:#301C1A;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#15130F; --card:#1E1A15; --line:#332C23; --ink:#F2EDE5; --ink-soft:#B3A99C; --ink-faint:#776E63;
+    --brand:#E37A4D; --brand-ink:#F3A47D; --brand-tint:#33231A; --ok-tint:#132A1E; --warn-tint:#2F2412; --bad-tint:#301C1A;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:'Manrope',system-ui,sans-serif; padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0);}
+  .wrap{max-width:860px; margin:0 auto; padding:36px 22px 80px;}
+  h1{font-size:22px; font-weight:800; margin:0;}
+  .top{display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:26px; flex-wrap:wrap;}
+  .brand-row{display:flex; align-items:center; gap:9px;}
+  .brand-row svg{color:var(--brand);}
+  .brand-row span.label{font-size:11px; font-weight:700; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.05em; margin-left:6px; padding:2px 8px; border:1px solid var(--line); border-radius:99px;}
+
+  .toggle-card{display:flex; align-items:center; gap:12px; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:10px 16px;}
+  .toggle-card .txt{font-size:13px; font-weight:700;}
+  .switch{position:relative; width:44px; height:26px; flex-shrink:0;}
+  .switch input{opacity:0; width:0; height:0;}
+  .slider{position:absolute; inset:0; background:var(--line); border-radius:99px; cursor:pointer; transition:.15s;}
+  .slider::before{content:''; position:absolute; width:20px; height:20px; left:3px; top:3px; background:#fff; border-radius:50%; transition:.15s;}
+  input:checked + .slider{background:var(--ok);}
+  input:checked + .slider::before{transform:translateX(18px);}
+
+  .tabs{display:flex; gap:6px; background:var(--card); border:1px solid var(--line); border-radius:13px; padding:4px; margin-bottom:22px; max-width:420px;}
+  .tabs button{flex:1; border:none; background:none; padding:10px 6px; font-family:inherit; font-size:13px; font-weight:700; color:var(--ink-soft); border-radius:9px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;}
+  .tabs button.active{background:var(--brand); color:#fff;}
+  .count-badge{background:rgba(0,0,0,.12); font-size:10.5px; padding:1px 6px; border-radius:99px;}
+  .tabs button.active .count-badge{background:rgba(255,255,255,.25);}
+
+  table{width:100%; border-collapse:collapse;}
+  .row{display:grid; grid-template-columns:2fr 1fr 1fr 1fr 1.3fr auto; gap:10px; align-items:center; padding:13px 14px; border:1px solid var(--line); border-radius:13px; background:var(--card); margin-bottom:9px;}
+  .row.head{background:none; border:none; padding:0 14px; font-size:11px; font-weight:800; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.04em;}
+  .row .name{font-weight:700; font-size:14px;}
+  .row .sub{font-size:11.5px; color:var(--ink-soft); margin-top:1px;}
+  select, input[type=number], input[type=text]{
+    font-family:inherit; font-size:13px; padding:8px 9px; border-radius:9px; border:1.3px solid var(--line);
+    background:var(--paper); color:var(--ink); width:100%;
+  }
+  .status-in-stock{color:var(--ok);} .status-low{color:var(--warn);} .status-out{color:var(--bad);}
+
+  .btn{border:none; border-radius:9px; font-weight:700; font-family:inherit; font-size:12.5px; padding:9px 13px; cursor:pointer; white-space:nowrap;}
+  .btn-primary{background:var(--brand); color:#fff;}
+  .btn-quiet{background:var(--paper); color:var(--ink); border:1px solid var(--line);}
+  .btn-ok{background:var(--ok-tint); color:var(--ok);}
+  .btn-row{display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end;}
+
+  .activity-row{display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px 16px; border:1px solid var(--line); border-radius:13px; background:var(--card); margin-bottom:9px; flex-wrap:wrap;}
+  .activity-row .info{min-width:0;}
+  .chip{font-size:10.5px; font-weight:800; padding:2.5px 9px; border-radius:99px; text-transform:uppercase;}
+  .chip.pending{background:var(--warn-tint); color:var(--warn);}
+  .chip.ready{background:var(--ok-tint); color:var(--ok);}
+  .chip.done{background:var(--line); color:var(--ink-faint);}
+  .chip.new{background:var(--bad-tint); color:var(--bad);}
+  .chip.resolved{background:var(--ok-tint); color:var(--ok);}
+  .empty{text-align:center; padding:60px 20px; color:var(--ink-faint); font-size:14px;}
+  .note-top{font-size:12px; color:var(--ink-faint); background:var(--card); border:1px dashed var(--line); border-radius:11px; padding:10px 14px; margin-bottom:20px;}
+
+  @media (max-width:700px){
+    .row{grid-template-columns:1fr; gap:8px;}
+    .row.head{display:none;}
+    .row > div{display:flex; justify-content:space-between; align-items:center;}
+    .row > div::before{content:attr(data-label); font-size:10.5px; font-weight:800; color:var(--ink-faint); text-transform:uppercase;}
+    .row .name::before{content:none;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand-row">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9.2"/><path d="M8.5 12.5c.7-2.4 2-3.6 3.5-3.6s2.6.9 3.5 2.2M9 15.5c1-.6 2-.9 3-.9s2 .3 3 .9"/></svg>
+      <h1>Aspretto<span class="label">Staff</span></h1>
+    </div>
+    <label class="toggle-card">
+      <span class="txt" id="staffed-label">Staffed</span>
+      <span class="switch"><input type="checkbox" id="staffed-toggle" checked><span class="slider"></span></span>
+    </label>
+  </div>
+
+  <div class="note-top">Shares data with the customer app on this same browser/device — useful for a live demo on one machine. A real deployment would sync this over a server instead.</div>
+
+  <div class="tabs">
+    <button data-tab="catalog" class="active">Catalog</button>
+    <button data-tab="orders">Pre-orders <span class="count-badge" id="orders-count">0</span></button>
+    <button data-tab="reports">Reports <span class="count-badge" id="reports-count">0</span></button>
+  </div>
+
+  <div id="content"></div>
+</div>
+
+<script>
+const LS = { catalog:'aspretto_catalog', staffed:'aspretto_staffed', preorders:'aspretto_preorders', reports:'aspretto_reports', notifies:'aspretto_notifies' };
+const DEFAULT_CATALOG = [
+  {id:'cookies',  name:'Cookies',   category:'Snacks',     variety:'Chocolate chip', veg:true,  price:20, status:'low', qty:3,  eta:'~2 hrs'},
+  {id:'sandwich', name:'Sandwich',  category:'Snacks',     variety:'Veg & cheese',   veg:true,  price:40, status:'out', qty:0,  eta:'Tomorrow, 9 AM'},
+  {id:'chips',    name:'Chips',     category:'Snacks',     variety:'Masala',         veg:true,  price:20, status:'in-stock', qty:18},
+  {id:'muffin',   name:'Muffin',    category:'Snacks',     variety:'Banana',         veg:true,  price:35, status:'in-stock', qty:9},
+  {id:'granola',  name:'Granola Bar',category:'Snacks',    variety:'Oats & honey',   veg:true,  price:25, status:'in-stock', qty:14},
+  {id:'wafers',   name:'Wafers',    category:'Snacks',     variety:'Chocolate',      veg:true,  price:15, status:'in-stock', qty:30},
+  {id:'namkeen',  name:'Namkeen Pack',category:'Snacks',   variety:'Spicy mix',      veg:true,  price:20, status:'low', qty:4, eta:'~2 hrs'},
+  {id:'juice',    name:'Juice',     category:'Beverages',  variety:'Mixed fruit',    veg:true,  price:30, status:'in-stock', qty:22},
+];
+function loadJSON(key, fallback){ try{ const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }catch(e){ return fallback; } }
+function saveJSON(key, val){ try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){} }
+function getCatalog(){ let c = loadJSON(LS.catalog, null); if(!c){ c = DEFAULT_CATALOG; saveJSON(LS.catalog, c); } return c; }
+function setCatalog(c){ saveJSON(LS.catalog, c); }
+function getStaffed(){ const v = localStorage.getItem(LS.staffed); return v === null ? true : v === 'true'; }
+function setStaffed(v){ localStorage.setItem(LS.staffed, v ? 'true':'false'); }
+function getPreorders(){ return loadJSON(LS.preorders, []); }
+function setPreorders(v){ saveJSON(LS.preorders, v); }
+function getReports(){ return loadJSON(LS.reports, []); }
+function setReports(v){ saveJSON(LS.reports, v); }
+
+let activeTab = 'catalog';
+
+function renderStaffToggle(){
+  const s = getStaffed();
+  document.getElementById('staffed-toggle').checked = s;
+  document.getElementById('staffed-label').textContent = s ? 'Staffed' : 'Unstaffed';
+}
+document.getElementById('staffed-toggle').addEventListener('change', e=>{ setStaffed(e.target.checked); renderStaffToggle(); });
+
+function renderTabs(){
+  document.querySelectorAll('.tabs button').forEach(b=> b.classList.toggle('active', b.dataset.tab===activeTab));
+  document.getElementById('orders-count').textContent = getPreorders().filter(o=>o.status==='pending').length;
+  document.getElementById('reports-count').textContent = getReports().filter(r=>r.status==='new').length;
+}
+document.querySelectorAll('.tabs button').forEach(b=> b.addEventListener('click', ()=>{ activeTab = b.dataset.tab; render(); }));
+
+function renderCatalog(){
+  const items = getCatalog();
+  const head = `<div class="row head"><div>Item</div><div>Status</div><div>Qty left</div><div>Price (\u20B9)</div><div>Restock ETA</div><div></div></div>`;
+  const rows = items.map((it,i) => `
+    <div class="row">
+      <div data-label="Item"><div class="name">${it.name}</div><div class="sub">${it.category} \u00b7 ${it.variety}</div></div>
+      <div data-label="Status">
+        <select onchange="updateItem(${i},'status',this.value)">
+          <option value="in-stock" ${it.status==='in-stock'?'selected':''}>In Stock</option>
+          <option value="low" ${it.status==='low'?'selected':''}>Low</option>
+          <option value="out" ${it.status==='out'?'selected':''}>Out</option>
+        </select>
+      </div>
+      <div data-label="Qty left"><input type="number" min="0" value="${it.qty}" onchange="updateItem(${i},'qty',parseInt(this.value)||0)"></div>
+      <div data-label="Price"><input type="number" min="0" value="${it.price}" onchange="updateItem(${i},'price',parseInt(this.value)||0)"></div>
+      <div data-label="Restock ETA"><input type="text" value="${it.eta||''}" placeholder="—" onchange="updateItem(${i},'eta',this.value)"></div>
+      <div></div>
+    </div>`).join('');
+  document.getElementById('content').innerHTML = head + rows;
+}
+function updateItem(i, field, value){
+  const items = getCatalog(); items[i][field] = value; setCatalog(items); renderTabs();
+}
+
+function renderOrders(){
+  const orders = getPreorders().slice().reverse();
+  if(!orders.length){ document.getElementById('content').innerHTML = `<div class="empty">No pre-orders yet.</div>`; return; }
+  document.getElementById('content').innerHTML = orders.map(o => {
+    const idx = getPreorders().findIndex(x=>x.id===o.id);
+    return `<div class="activity-row">
+      <div class="info"><div class="name" style="font-weight:700;">${o.itemName} \u00d7${o.qty} \u2014 ${o.pickupName}</div>
+        <div class="sub" style="font-size:12px;color:var(--ink-soft);">Code ${o.pickupCode} \u00b7 \u20B9${o.price*o.qty} \u00b7 <span class="chip ${({pending:'pending',ready:'ready',picked_up:'done',cancelled:'new'})[o.status]||'done'}">${({pending:'Pending',ready:'Ready',picked_up:'Picked up',cancelled:'Cancelled'})[o.status]||o.status}</span></div></div>
+      <div class="btn-row">
+        ${o.status==='pending' ? `<button class="btn btn-primary" onclick="setOrderStatus(${idx},'ready')">Mark Ready</button>` : ''}
+        ${o.status==='ready' ? `<button class="btn btn-ok" onclick="setOrderStatus(${idx},'picked_up')">Mark Picked Up</button>` : ''}
+        ${o.status==='picked_up' ? `<span class="chip done">Complete</span>` : ''}
+        ${o.status==='cancelled' ? `<span class="chip new">Cancelled by customer</span>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+function setOrderStatus(idx, status){
+  const orders = getPreorders(); orders[idx].status = status; setPreorders(orders); render();
+}
+
+function renderReports(){
+  const reports = getReports().slice().reverse();
+  if(!reports.length){ document.getElementById('content').innerHTML = `<div class="empty">No reports submitted.</div>`; return; }
+  document.getElementById('content').innerHTML = reports.map(r => {
+    const idx = getReports().findIndex(x=>x.id===r.id);
+    return `<div class="activity-row">
+      <div class="info"><div class="name" style="font-weight:700;">${r.itemName}</div>
+        <div class="sub" style="font-size:12px;color:var(--ink-soft);">${r.note ? r.note : 'No details added'} \u00b7 <span class="chip ${r.status==='new'?'new':'resolved'}">${r.status==='new'?'New':'Resolved'}</span></div></div>
+      <div class="btn-row">
+        ${r.status==='new' ? `<button class="btn btn-ok" onclick="setReportStatus(${idx},'resolved')">Mark Resolved</button>` : `<span class="chip done">Closed</span>`}
+      </div>
+    </div>`;
+  }).join('');
+}
+function setReportStatus(idx, status){
+  const reports = getReports(); reports[idx].status = status; setReports(reports); render();
+}
+
+function render(){
+  renderStaffToggle(); renderTabs();
+  if(activeTab==='catalog') renderCatalog();
+  else if(activeTab==='orders') renderOrders();
+  else renderReports();
+}
+render();
+setInterval(render, 4000); // picks up changes made in the user app in another tab
+</script>
+</body>
+</html>
